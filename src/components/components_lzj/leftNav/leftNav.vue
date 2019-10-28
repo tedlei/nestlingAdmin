@@ -14,7 +14,7 @@
                   {
                       iconfont: 'iconshouyex',
                       context: '首页',
-                      url: '/'
+                      url: ''
                   },
                   {
                       iconfont: 'iconshezhi-tianchong',
