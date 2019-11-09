@@ -14,57 +14,61 @@
                   {
                       iconfont: 'iconshouyex',
                       context: '首页',
-                      url: '/'
+                      url: ''
                   },
                   {
                       iconfont: 'iconshezhi-tianchong',
                       context: '后台数据',
+                      url:'userData',
                       optionData: [
-                          {
-                              text: '用户数据',
-                              optionUrl: ''
-                          },
-                          {
-                              text: '预约数据',
-                              optionUrl: ''
-                          }],
-                      url: ''
+                        {
+                            text: '用户数据',
+                            optionUrl: 'userData'
+                        },
+                        {
+                            text: '预约数据',
+                            optionUrl: 'subscribeData'
+                        }],
                   },
                   {
                       iconfont: 'iconkecheng',
                       context: '学校管理',
-                      url: '',
+                      url: 'schoolManage',
                       optionData: [
                           {
+                              text: '学校增删管理',
+                              optionUrl: 'schoolManage'
+                          },
+                          {
                               text: '学校资质审核',
-                              optionUrl: ''
+                              optionUrl: 'schoolManage'
                           },
                           {
                               text: '学校课程审核',
-                              optionUrl: ''
+                              optionUrl: 'curriculumManage'
                           },
                           {
                               text: '学校教师审核',
-                              optionUrl: ''
+                              optionUrl: 'teacherManage'
                           },
                           {
                               text: '学校资讯审核',
-                              optionUrl: ''
+                              optionUrl: 'informationManage'
                           },
                           {
                               text: '学校相册审核',
-                              optionUrl: ''
+                              optionUrl: 'schoolPhoneManage'
                           },
                           {
                               text: '基础设置审核',
-                              optionUrl: ''
+                              optionUrl: 'basisSettingManage'
                           }
                       ],
                   },
                   {
                       iconfont: 'iconwo',
                       context: '问题反馈',
-                      url: ''
+                      url: 'coupleBack'
                   },
                   {
                       iconfont: 'iconzixuntianchong',
@@ -79,50 +83,50 @@
                   {
                       iconfont: 'iconliuyan-fill',
                       context: '雏鸟账单',
-                      url: '',
+                      url: 'pledgeMoney',
                       optionData: [
                           {
                               text: '保证金',
-                              optionUrl: ''
+                              optionUrl: 'pledgeMoney'
                           },
                           {
                               text: '雏鸟年费VIP',
-                              optionUrl: ''
+                              optionUrl: 'pledgeVIP'
                           },
                       ]
                   },
                   {
                       iconfont: 'iconcustom-service',
                       context: '广告上传',
-                      url: '',
+                      url: 'slideshow',
                       optionData: [
                           {
                               text: '主题广告位',
-                              optionUrl: ''
+                              optionUrl: 'slideshow'
                           },
                           {
-                              text: '首页推荐课程',
-                              optionUrl: ''
+                              text: '首页广告位',
+                              optionUrl: 'recommend'
                           },
-                          {
-                              text: '热门学校广告位',
-                              optionUrl: ''
-                          },
-                          {
-                              text: '热门课程广告位',
-                              optionUrl: ''
-                          },
+                        //   {
+                        //       text: '热门学校广告位',
+                        //       optionUrl: ''
+                        //   },
+                        //   {
+                        //       text: '热门课程广告位',
+                        //       optionUrl: ''
+                        //   },
                           {
                               text: '个人中心广告位',
-                              optionUrl: ''
+                              optionUrl: 'personageCenter'
                           },
                           {
                               text: '底部广告位',
-                              optionUrl: ''
+                              optionUrl: 'BottomImg'
                           },
                           {
                               text: '登录背景图广告位',
-                              optionUrl: ''
+                              optionUrl: 'loginBgImg'
                           }
                       ]
                   }

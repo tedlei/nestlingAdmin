@@ -2,35 +2,153 @@ import echarts from "../../../../static/js/echarts.js";
 export default {
   data() {
     return {
-      lineChartData:[],
+      leftTopData:[],   
+      rightTopData:[],
+      leftBottomData:[],   
+      rightBottomData:[],
 
 
-      isLineChart:false,  //是否显示折线图
     };
   },
+  created() {
+    this.leftTopData = [10,30];   
+    this.rightTopData = [
+      ['一月', 43.3, 85.8],
+      ['二月', 83.1, 73.4],
+      ['三月', 86.4, 65.2],
+      ['四月', 86.4, 65.2],
+      ['五月', 86.4, 65.2],
+      ['六月', 72.4, 53.9],
+      ['七月', 72.4, 53.9],
+      ['八月', 72.4, 53.9],
+      ['九月', 72.4, 53.9],
+      ['十月', 72.4, 53.9],
+      ['十一月', 72.4, 53.9],
+      ['十二月', 72.4, 53.9]
+    ];   
+    this.leftBottomData = [10,50,70,60,34,11,10,50,70,60,34,11];
+    this.rightBottomData = [1,2,3,4,5,6,7,8,9,1,1,2]
+  },
   mounted() {
-    // this.lineChart();    //调用折线图
-    this.histogram();  
-    this.createCircle()  
-    setTimeout(() => {
-      this.lineChartData = [10,50,70,60,34,11];
-      if(this.lineChartData.length<=1){
-        this.isLineChart = false;
-        return
-      }
-      this.isLineChart = true;
-      setTimeout(() => {
-        this.lineChart(echarts.init(document.getElementById('lineChart')));
-      }, 1);
-    }, 300);
+    this.createCircle();
+    this.histogram();
+    this.lineChart();
+    this.rightPillar();
   },
   methods: {
-    lineChart(lcChart){    //折线图
+    getData(){
+      
+    },
+
+
+
+
+
+
+
+
+    createCircle(){     //左上饼图
+      // 基于准备好的dom，初始化echarts实例
+      let circle1 = echarts.init(document.getElementById('circle1'));
+      let option = {
+        title : {
+          text: '用户总数',
+          subtext: this.leftTopData[0]+this.leftTopData[1],
+          x:'center',
+          top:125
+        },
+        series: [
+          {
+            type: 'pie',
+            center: ['50%', '50%'],
+            radius: ['50%', '100%'],
+            startAngle:90,
+            hoverAnimation:false,
+            silent :true,
+            label: {
+              show: false
+            },
+            data: [
+              {
+                value:this.leftTopData[0],
+                itemStyle: {
+                  color: '#FF7225'
+                }
+              },
+              {
+                value:this.leftTopData[1],
+                itemStyle: {
+                  color: '#2AB0EA'
+                }
+              }
+            ]
+          }
+        ]
+      };
+      // 使用刚指定的配置项和数据显示图表。
+      circle1.setOption(option)
+    },
+
+    histogram(){    //右上柱形图
+      // 基于准备好的dom，初始化echarts实例
+      let hgChart = echarts.init(document.getElementById('histogram'));
+      let option = {
+        grid: {  //整体图形的位置
+          top: '15%',
+          left: '0%',
+          right: '0%',
+          bottom: '0%',
+          containLabel: true
+        },
+        title: {   //提示文字设置
+          text: '单位（人）',
+          left:'0',
+          fontWeight:100,
+          textStyle:{
+            fontSize:14         
+          }
+        },
+        dataset: {  //柱形图分组数据
+          source: this.rightTopData
+        },
+        xAxis: {type: 'category'},
+        yAxis: {
+          splitLine:{
+						show:false
+					}
+        },
+        series: [
+            {
+              type: 'bar',
+              barGap:0,   //柱间隔
+              barMaxWidth:'10px',   //柱宽度
+              itemStyle: {    //柱样式
+                color: '#2AB0EA',
+                barBorderRadius:[5, 5, 0,0]   //设置柱形图圆角
+              }
+            },
+            {
+              type: 'bar',
+              barGap:0,
+              barMaxWidth:'10px',
+              itemStyle: {
+                color: '#FF7225',
+                barBorderRadius:[5, 5, 0,0]   //设置柱形图圆角
+              }
+            }
+        ]
+      };
+      // 使用刚指定的配置项和数据显示图表。
+      hgChart.setOption(option);
+    },
+
+    lineChart(){    //左下角折线图
+      let lcChart = echarts.init(document.getElementById('lineChart'))
       // 基于准备好的dom，初始化echarts实例
       let option = {
         title: {   //提示文字设置
           text: '单位（人）',
-          left:'94%',
+          left:'87%',
           fontWeight:100,
           textStyle:{
             fontSize:14         
@@ -46,7 +164,7 @@ export default {
         grid: {  //整体图形的位置
           top: '10%',
           left: '1%',
-          right: '0%',
+          right: '2%',
           bottom: '0%',
           containLabel: true
         },
@@ -68,35 +186,32 @@ export default {
             name:'浏览量',
             type:'line',
             stack: '总量',
-            symbol: "none",
-            smooth: true,
-            lineStyle:{    //线条样式
-              color:'#2AB0EA'
+            symbol: "circle",
+            symbolSize:10,
+            smooth: false,
+            // lineStyle:{    //线条样式
+            //   color:'#FF7225'
+            // },
+            itemStyle: {
+              normal: {
+                  color: "#FF7225",
+                  lineStyle: {
+                      color: "#FF7225"
+                  }
+              }
             },
-            areaStyle: {   //填充区域样式
-              color:'#2AB0EA'
-            },
-            // data:[5, 30, 45, 60, 90, 130, 120, 170, 150, 190, 230, 210]
-            data:this.lineChartData
+            data:this.leftBottomData
           }
         ]
       };
       // 使用刚指定的配置项和数据显示图表。
       lcChart.setOption(option);
     },
-    histogram(){    //柱形图
+
+    rightPillar(){    //右下柱形图
       // 基于准备好的dom，初始化echarts实例
-      let hgChart = echarts.init(document.getElementById('histogram'));
+      let hgChart = echarts.init(document.getElementById('userRise'));
       let option = {
-        title: {   //提示文字设置
-          text: '单位（个）',
-          top:'1%',
-          left:'87.5%',
-          fontWeight:100,
-          textStyle:{
-            fontSize:14         
-          }
-        },
         grid: {  //整体图形的位置
           top: '15%',
           left: '0%',
@@ -104,142 +219,40 @@ export default {
           bottom: '0%',
           containLabel: true
         },
-        xAxis: {  //x轴
+        title: {   //提示文字设置
+          text: '单位（人）',
+          left:'85%',
+          fontWeight:100,
+          textStyle:{
+            fontSize:14         
+          }
+        },
+        xAxis: {
           type: 'category',
-          data: ['课程发布', '教师发布', '资讯发布']
+          data:['一月','二月','三月','四月','五月','六月','七月','八月','九月', '十月','十一月', '十二月']
         },
-        yAxis: {  //
-            type: 'value',
-            show:false,
-				    splitLine:{show:false},//隐藏网格线
-
+        yAxis: {
+          splitLine:{
+						show:false
+					}
         },
-        series: [   //
+        series: [
           {
-            data: [40, 10, 1],
             type: 'bar',
-            barMaxWidth:'40px',
-            label:{
-              // value:[1,2,3],
-              show:true,  
-              fontSize:'18px',
-              position: 'top',
-              textStyle: {        //数值样式
-                color: 'black',
-                fontSize: 16
-              }
+            barGap:0,   //柱间隔
+            barMaxWidth:'20px',   //柱宽度
+            itemStyle: {    //柱样式
+              color: '#2AB0EA'
             },
-            itemStyle: {
-              normal: {
-                  // 随机显示
-                  // color:function(d){return "#"+Math.floor(Math.random()*(256*256*256-1)).toString(16);},
-                  // 定制显示（按顺序）
-                  color: function(params) { 
-                      var colorList = ['#FF7225','#2AB0EA','#CC0808']; 
-                      return colorList[params.dataIndex] 
-                  }
-              },
-            },
+            data:this.rightBottomData
           }
         ]
       };
       // 使用刚指定的配置项和数据显示图表。
       hgChart.setOption(option);
     },
-
-    createCircle(){
-      // 基于准备好的dom，初始化echarts实例
-      let circle1 = echarts.init(document.getElementById('circle1'));
-      // 使用刚指定的配置项和数据显示图表。
-      circle1.setOption(this.circle(100,90,300,100))
-    },
-
-    circle(num1,num2,num3,num4){    //圆
-       let z = (num1+num2)/9*10
-       let z1 = z*0.9*((num1-num2)/num1);
-       let z2 = z*0.9*(num2/num1);
-       let z3 = z*0.1;
-
-       let k = (num3+num4)/9*10
-       let k1 = k*0.9*((num3-num4)/num3);
-       let k2 = k*0.9*(num4/num3);
-       let k3 = k*0.1;
-
-       return {
-        series: [
-          {
-            type: 'pie',
-            center: ['50%', '50%'],
-            radius: ['85%', '100%'],
-            hoverAnimation:false,
-            silent :true,
-            startAngle:70,
-            label: {
-              show: false
-            },
-            data: [
-              {
-                value: z2,
-                itemStyle: {
-                  color: '#FF7225'
-                }
-              },
-              {
-                value:z1,
-                itemStyle: {
-                  color: '#F2F2F2'
-                }
-              },
-              {
-                value: z3,
-                itemStyle: {
-                  color: 'none'
-                }
-              },
-            ]
-          },
-          {
-            type: 'pie',
-            center: ['50%', '50%'],
-            radius: ['60%', '75%'],
-            startAngle:70,
-            hoverAnimation:false,
-            silent :true,
-            label: {
-              show: false
-            },
-            data: [
-              {
-                value: k2,
-                itemStyle: {
-                  color: '#2AB0EA'
-                }
-              },
-              {
-                value:k1,
-                itemStyle: {
-                  color: '#F2F2F2'
-                }
-              },
-              {
-                value: k3,
-                itemStyle: {
-                  color: 'none'
-                }
-              },
-            ]
-          }
-        ]
-       };
-    }
   },
-  computed: {
-    //折线图数据是否少于俩个
-    zxtIsData(){
-      if(this.lineChartData.length<=1) return false;
-      return true;
-    },
-  },
+
   watch: {
     $route:function(path,param){
       console.log(path,param)

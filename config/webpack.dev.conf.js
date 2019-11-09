@@ -12,7 +12,7 @@ let config = merge(baseWebpackConfig, {
             warnings: true,
             errors: true
         },
-        port: 9000,
+        port: 8888,
         hot: true, // 启动热更新
         host: '0.0.0.0'
     },
