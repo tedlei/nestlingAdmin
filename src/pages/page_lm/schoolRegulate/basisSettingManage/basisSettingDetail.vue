@@ -36,8 +36,10 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img xxfm">
             <img :src="settingObj.schoolCover" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolCover)<0" @click="topcsPhone(settingObj.schoolCover,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolCover,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolCover)<0" @click="topcsPhone(settingObj.schoolCover,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolCover,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -49,10 +51,12 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img logo">
             <img :src="settingObj.schoolLogo" alt="正在加载……">
-            <p class="bsm_li_p" 
-            v-if="auditNO.indexOf(settingObj.schoolLogo)<0" 
-            @click="topcsPhone(settingObj.schoolLogo,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLogo,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" 
+              v-if="auditNO.indexOf(settingObj.schoolLogo)<0" 
+              @click="topcsPhone(settingObj.schoolLogo,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLogo,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -63,8 +67,10 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img gzh">
             <img :src="settingObj.schoolQRcode" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolQRcode)<0" @click="topcsPhone(settingObj.schoolQRcode,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolQRcode,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolQRcode)<0" @click="topcsPhone(settingObj.schoolQRcode,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolQRcode,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -76,8 +82,10 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img wzt">
             <img :src="settingObj.schoolLocalhostPhone" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolLocalhostPhone)<0" @click="topcsPhone(settingObj.schoolLocalhostPhone,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLocalhostPhone,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolLocalhostPhone)<0" @click="topcsPhone(settingObj.schoolLocalhostPhone,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLocalhostPhone,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -89,8 +97,10 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img">
             <img :src="settingObj.schoolAdvertisingPhone1" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone1)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone1,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone1,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone1)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone1,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone1,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -101,8 +111,10 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img">
             <img :src="settingObj.schoolAdvertisingPhone2" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone2)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone2,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone2,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone2)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone2,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone2,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
@@ -113,13 +125,15 @@
         <div class="bsm_li_right">
           <div class="bsm_li_img">
             <img :src="settingObj.schoolAdvertisingPhone3" alt="正在加载……">
-            <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone3)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone3,false)">不通过</p>
-            <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone3,true)">撤销</p>
+            <template v-if="!auditPass">
+              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone3)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone3,false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone3,true)">撤销</p>
+            </template>
           </div>
         </div>
       </li>
     </ul>
-    <div class="bsm_btn">
+    <div class="bsm_btn" v-if="!auditPass">
       <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button>
       <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(false)">审核不通过</el-button>
       <div class="bsm_tc fx" v-show="isShowTc" @click="topCloseTc">
@@ -147,6 +161,7 @@
 
 <script>
 export default {
+  props:['auditPass'],
   data () {
     return {
       isForbiddenBnt:false,   //是否禁用按钮

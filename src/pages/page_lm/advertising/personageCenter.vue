@@ -1,60 +1,40 @@
 <template>
-  <div class="pcDm-app fx">
-    <div class="pc_d1">
+  <div class="pece-app fx">
+    <div class="pece_d1">
       <template v-for="(item,i) of topTitleList">
-        <span :key="i" class="pc_d1_span">
+        <span :key="i" class="pece_d1_span">
           {{item.title}}
         </span>
       </template>
     </div>
-    <div class="pc_d2" ref="pc_d2">
-      <div class="pc_d2_li fx">
-        <div class="pc_bdi_span"><span>主题广告图1</span></div>
-        <div class="pc_bdi_input input">
-          <el-input v-model="qrCodeImgName" :disabled="true"></el-input>
+    <div class="pece_d2" ref="pece_d2">
+      <div v-for="(item,i) of uploadList" :key="i">
+        <div class="pece_d2_li fx">
+          <div class="pece_bdi_span"><span>{{item.title}}</span></div>
+          <div class="pece_bdi_input input">
+            <el-input v-model="item.pic" :disabled="true"></el-input>
+          </div>
+          <el-upload
+            class="upload-demo"
+            :action="imgUploadUrl"
+            :limit="1"
+            ref = 'imgUpload'
+            :on-success="(res,file)=>{return aptitudeSuccess(res,file,i)}"
+            :before-upload="beforeAvatarUpload">
+            <el-button size="small" @click="topQk(i)" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">建议尺寸：260*150 px 格式为JPG、PNG,且不超过1M</div>
+          </el-upload>
         </div>
-        <el-upload
-          class="upload-demo"
-          action="http://192.168.3.65:9101/upload.do"
-          multiple
-          :limit="1"
-          :on-success="getqrCodeImg"
-          :before-upload="beforeAvatarUpload">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">建议尺寸：200*200 px 格式为JPG、PNG,且不超过1M</div>
-        </el-upload>
-      </div>
-      <div class="pc_d2_li fx">
-        <div class="pc_bdi_span"><span>链接1</span></div>
-        <div class="pc_bdi_input input">
-          <el-input v-model="qrCodeImgName"></el-input>
-        </div>
-      </div>
-      <div class="pc_d2_li fx">
-        <div class="pc_bdi_span"><span>主题广告图2</span></div>
-        <div class="pc_bdi_input input">
-          <el-input v-model="qrCodeImgName" :disabled="true"></el-input>
-        </div>
-        <el-upload
-          class="upload-demo"
-          action="http://192.168.3.65:9101/upload.do"
-          multiple
-          :limit="1"
-          :on-success="getqrCodeImg"
-          :before-upload="beforeAvatarUpload">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">建议尺寸：200*200 px 格式为JPG、PNG,且不超过1M</div>
-        </el-upload>
-      </div>
-      <div class="pc_d2_li fx">
-        <div class="pc_bdi_span"><span>链接2</span></div>
-        <div class="pc_bdi_input input">
-          <el-input v-model="qrCodeImgName"></el-input>
+        <div class="pece_d2_li fx">
+          <div class="pece_bdi_span"><span>链接{{item.sortOrder}}</span></div>
+          <div class="pece_bdi_input input">
+            <el-input @blur="onBlur(i)" v-model="item.url"></el-input>
+          </div>
         </div>
       </div>
     </div>
-    <div class="pc_btn fx">
-      <el-button type="primary">确认</el-button>
+    <div class="pece_btn fx">
+      <el-button type="primary" @click="topCommit">确认</el-button>
     </div>
   </div>
 </template>
@@ -71,93 +51,83 @@ Vue.use(Upload);
 export default {
   data () {
     return {
-      topTitleList:[{title:'主题广告位'}],    //顶部抬头显示
+      topTitleList:[{title:'个人中心广告位'}],    //顶部抬头显示
       qrCodeImgName:'',
       qrCodeImgUrl:'',
+
+      imgUploadUrl:'http://192.168.3.78:9101/upload.do',   //图片上传路劲
+
+      uploadList:[    //上传列表
+        {pic:'',url:'',title:'个人中心广告1',sortOrder:"1",categoryId:'7'},
+        {pic:'',url:'',title:'个人中心广告2',sortOrder:"2",categoryId:'7'},
+      ],
     };
   },
 
   created(){
+    this.getThemeAdvList();
   },
 
   methods: {
-    //获取图片路劲
-    aptitudeSuccess(res, file,str) {
-      console.log(res, file,str)
+    //获取主题广告列表
+    getThemeAdvList(){
+      let url = '/content/cateId.do';
+      let data = {categoryId:'7'};
+      let ull = this.uploadList;
+      this.fetch({url,data,method:'get'},2).then(res=>{
+        if(res.data.length<=0) return;
+        for(let num in ull){
+          ull[num].pic = res.data[num].pic;
+          ull[num].url = res.data[num].url;
+        }
+      })
+    },
+
+    //获取上传后的图片路劲
+    aptitudeSuccess(res, file,num) {
       if(!res.success) {
         this.$message({message:'上传失败，请重新上传！',type: 'warning'});
         return
       }
-      switch (str) {
-        case 'logo':
-          this.LogoImgUrl = res.message;
-          this.LogoImgName = file.name;
-          break;
-        case 'qrCode':
-          this.qrCodeImgUrl = res.message;
-          this.qrCodeImgName = file.name;
-          break;
-        case 'onea':
-          this.oneAdvertisingImgUrl = res.message;
-          this.oneAdvertisingImgName = file.name;
-          break;
-        case 'twoa':
-          this.twoAdvertisingImgUrl = res.message;
-          this.twoAdvertisingImgName = file.name;
-          break;
-        case 'threea':
-          this.threeAdvertisingImgUrl = res.message;
-          this.threeAdvertisingImgName = file.name;
-          break;
-        case 'map':
-          this.mapImgUrl = res.message;
-          this.mapImgName = file.name;
-          break;
-      }
+      this.uploadList[num].pic = res.message;
     },
-
-    //上传Logo图片
-    getLogoImg(res,file){
-      this.aptitudeSuccess(res, file,'logo');
-    },
-    //上传Logo图片
-    getqrCodeImg(res,file){
-      this.aptitudeSuccess(res, file,'qrCode');
-    },
-    //上传广告图片1
-    getOneAdvertisingImg(res,file){
-      this.aptitudeSuccess(res, file,'onea');
-    },
-    //上传广告图片2
-    getTwoAdvertisingImg(res,file){
-      this.aptitudeSuccess(res, file,'twoa');
-    },
-    //上传广告图片3
-    getThreeAdvertisingImg(res,file){
-      this.aptitudeSuccess(res, file,'threea');
-    },
-    //上传广告图片3
-    getMapImg(res,file){
-      this.aptitudeSuccess(res, file,'map');
-    },
-
+    
     //判断图片格式和大小
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload(file,num) {
       const isJPG = file.type === 'image/png'||file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       if (!isJPG) this.$message({message:'上传头像图片只能是 JPG或png 格式!',type: 'warning'});
-      if (!isLt2M) this.$message({message:'上传头像图片大小不能超过 2MB!',type: 'warning'});
+      if (!isLt2M) this.$message({message:'上传头像图片大小不能超过 1MB!',type: 'warning'});
       return isJPG && isLt2M;
     },
-  },
-  watch: {
+
+    //上传时清空列表
+    topQk(num){
+      this.$refs.imgUpload[num].clearFiles();
+    },
+
+    onBlur(i){
+     let ull = this.uploadList;
+     let url = ull[i].url;
+     if(url.startsWith('http://')||url.startsWith('https://')) return
+     ull[i].url = 'http://'+url;
+    },
+
+    //点击确认时
+    topCommit(){
+      let url = '/content/update.do'
+      this.fetch({url,data:this.uploadList,method:'post'},6).then(res=>{
+        let {message,success} = res.data;
+        this.$message({message,type:success?'success':'warning'});
+      })
+    }
   },
 }
 
 </script>
 
 <style lang='less'>
-.pcDm-app{
+.pece-app{
   padding:20px;
   padding-top: 20px;
   position: relative;
@@ -166,30 +136,30 @@ export default {
   height: 100%;
   overflow-y: auto;
   background: white;
-  .pc_d1{
+  .pece_d1{
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(230,230,230,1);
     position: relative;
-    .pc_d1_span{
+    .pece_d1_span{
       font-size: 18px;
       color:rgba(51,51,51,1);
     }
   }
-  .pc_d2{
+  .pece_d2{
     width: 100%;
-    .pc_d2_li{
+    .pece_d2_li{
       margin-top:10px;
       width: 100%;
       height: 40px;
       align-items: center;
       // background-color: aqua;
-      .pc_bdi_span{
-        width: 9%;
+      .pece_bdi_span{
+        width: 10%;
         text-align: right;
         font-size: 16px;
         color:rgba(102,102,102,1);
       }
-      .pc_bdi_input{
+      .pece_bdi_input{
         margin-left: 2%;
         width: 30%;
         height: 100%;
@@ -204,7 +174,7 @@ export default {
           }
         }
       }
-      .pc_icon{
+      .pece_icon{
         margin-left: 30px;
         width: 18px;
         height: 18px;
@@ -213,14 +183,14 @@ export default {
           font-size: 18px;
         }
       }
-      .pc_span{
+      .pece_span{
         margin-left: 5px;
         font-size: 14px;
       }
       .fontColor{
         color:red;
       }
-      .pc_select{
+      .pece_select{
         border:0;
         display: flex;
         .el-select{
@@ -250,7 +220,8 @@ export default {
       }
     }
   }
-  .pc_btn{
+  .pece_btn{
+    padding-top: 20px;
     flex:1;
     justify-content: center;
     align-items:flex-end;

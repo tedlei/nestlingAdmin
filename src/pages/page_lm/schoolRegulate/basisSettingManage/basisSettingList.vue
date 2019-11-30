@@ -7,6 +7,7 @@
         </div>
         <div class="bsm_right_select">
           <el-select v-model="province" placeholder="请选择">
+            <el-option key="请选择" label="请选择" value=""></el-option>
             <el-option
               v-for="item in provinceList"
               :key="item"
@@ -14,7 +15,8 @@
               :value="item">
             </el-option>
           </el-select>
-          <el-select v-model="city" placeholder="请选择">
+          <el-select v-model="city" v-if="cityList.length>0" placeholder="请选择">
+            <el-option key="请选择" label="请选择" value=""></el-option>
             <el-option
               v-for="item in cityList"
               :key="item"
@@ -36,11 +38,11 @@
           </tr> 
         </thead>
         <tbody>
-          <tr v-for="(item,i) of basisList" :key="i">
-            <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'已审核':''}}</td>
+          <tr v-for="(item,i) of schoolList" :key="i">
+            <td>{{item.organizationName}}</td>
+            <td>{{item.basicsStatus*1===1?'审核通过':'未审核'}}</td>
             <td class="bsm_td_ck" @click="topLookOver(item.id)">查看</td>
-            <td>{{item.date}}</td>
+            <td>{{item.createTime}}</td>
           </tr>
         </tbody>
       </table>
@@ -61,7 +63,9 @@
 </template>
 
 <script>
+import chinaCityList from '../../../../../static/js/chinaCityList.js'
 export default {
+  props:['auditPass'],
   data () {
     return {
       provinceList: [],   //省列表
@@ -69,11 +73,20 @@ export default {
       province:'',    //省
       city:'',    //市
 
-      basisList:[],   //获取课程数据
+      schoolList:[],   //获取课程数据
 
       allDataNum:100,   //获取数据总条数
       atPresentNum:1,    //当前页数
       pageData:20,    //每页的数据条数
+
+      data:{
+        schoolid:123,
+        imgList:[
+          "a.jpn",
+          "a.jpn",
+        ],
+        status:'3',
+      }
     };
   },
   created(){
@@ -98,35 +111,27 @@ export default {
       this.cityList = chinaCityList['0_'+num]
     },
 
+    //查询学校
     topSearch(){
-      this.basisList = [];
-      let obj = {auditPass:this.auditPass};
-      if(this.province) obj.province = this.province;
-      if(this.city) obj.city = this.city;
-      console.log(obj)
-      this.basisList = [
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'}
-      ]
+      this.schoolList = [];
+      let url = '/school/findByPage.do'
+      let data = {
+        oneAddress:this.province,
+        twoAddress:this.city,
+        pageNo:''+this.atPresentNum,
+        pageSize:''+this.pageData,
+        schoolStatus:'3',
+        basicsStatus:'3',
+      }
+      if(this.auditPass){
+        data.basicsStatus='1'
+      }
+      console.log(data)
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        console.log(res.data.rows)
+        this.allDataNum = res.data.total;
+        this.schoolList = res.data.rows;
+      })
     },
      //获取分页数
     topClick(num){
@@ -138,7 +143,11 @@ export default {
       this.topSearch()
     },
     'province':function(val){
-      if(!val)return
+      if(!val){
+        this.city = '';
+        this.cityList = [];
+        return
+      }
       this.getCityList(val);
       this.topSearch();
     },

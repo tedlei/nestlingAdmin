@@ -12,7 +12,7 @@
       </span>
       <el-button v-if="topTitleList.length>1" class="bsm_btn bsm_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>
-    <router-view></router-view>
+    <router-view :auditPass='auditPass'></router-view>
   </div>
 </template>
 
@@ -43,9 +43,9 @@ export default {
       let num = obj.query.num;
       this.isShowBtn = num?false:true;
       if(num)
-        this.topTitleList=[{title:'学校课程审核',src:'curriculumManage'},{title:'学校设置详情'}]
+        this.topTitleList=[{title:'基础设置审核',src:'curriculumManage'},{title:'学校详情'}]
       else
-        this.topTitleList=[{title:'学校课程审核'}]
+        this.topTitleList=[{title:'基础设置审核'}]
     },
     //点击返回
     topBack(src){

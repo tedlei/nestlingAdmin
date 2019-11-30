@@ -106,32 +106,32 @@ export default {
 
     //获取学校列表
     topSearch(){
-      this.schoolPhoneList = [];
-      let obj = {
-        auditPass:this.auditPass,     //是否审核
-        atPresentNum:this.atPresentNum,    //页数
-        pageData:this.pageData   //每页条数
-      };
-      if(this.province) obj.province = this.province;
-      if(this.city) obj.city = this.city;
-      console.log(obj)
-      if(!this.auditPass){
-        this.schoolPhoneList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'}
-        ]
-      }else{
-        this.schoolPhoneList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'}
-        ]
-      }
+      // this.schoolPhoneList = [];
+      // let obj = {
+      //   auditPass:this.auditPass,     //是否审核
+      //   atPresentNum:this.atPresentNum,    //页数
+      //   pageData:this.pageData   //每页条数
+      // };
+      // if(this.province) obj.province = this.province;
+      // if(this.city) obj.city = this.city;
+      // console.log(obj)
+      // if(!this.auditPass){
+      //   this.schoolPhoneList = [
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'}
+      //   ]
+      // }else{
+      //   this.schoolPhoneList = [
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
+      //     {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'}
+      //   ]
+      // }
     },
      //获取分页数
     topClick(num){

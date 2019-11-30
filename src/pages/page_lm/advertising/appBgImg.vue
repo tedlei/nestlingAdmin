@@ -40,25 +40,25 @@
 </template>
 
 <script>
-import {Button,Select,Option,Input,MessageBox,Pagination,Upload} from 'element-ui'
-import Vue from 'vue';
-Vue.use(Button);
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(Input);
-Vue.use(Pagination);
-Vue.use(Upload);
+// import {Button,Select,Option,Input,MessageBox,Pagination,Upload} from 'element-ui'
+// import Vue from 'vue';
+// Vue.use(Button);
+// Vue.use(Select);
+// Vue.use(Option);
+// Vue.use(Input);
+// Vue.use(Pagination);
+// Vue.use(Upload);
 export default {
   data () {
     return {
-      topTitleList:[{title:'登陆背静广告位'}],    //顶部抬头显示
+      topTitleList:[{title:'app首页广告位'}],    //顶部抬头显示
       qrCodeImgName:'',
       qrCodeImgUrl:'',
 
       imgUploadUrl:'http://192.168.3.78:9101/upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
-        {pic:'',title:'登陆背静广告位',sortOrder:"1",categoryId:'6'},
+        {pic:'',title:'app首页广告位',sortOrder:"1",categoryId:'8'},
       ],
     };
   },
@@ -71,7 +71,7 @@ export default {
     //获取主题广告列表
     getThemeAdvList(){
       let url = '/content/cateId.do';
-      let data = {categoryId:'6'};
+      let data = {categoryId:'8'};
       let ull = this.uploadList;
       this.fetch({url,data,method:'get'},2).then(res=>{
         if(res.data.length<=0) return;

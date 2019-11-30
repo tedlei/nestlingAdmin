@@ -1,72 +1,76 @@
 // import引入组件
 //首页
-import homePage from '@/pages/page_lm/homePage/homePage'
+import homePage from '../pages/page_lm/homePage/homePage'
 
 //后台数据
-import userData from '@/pages/page_lm/backstageData/userData'
-import subscribeData from '@/pages/page_lm/backstageData/subscribeData'
+import userData from '../pages/page_lm/backstageData/userData'
+import subscribeData from '../pages/page_lm/backstageData/subscribeData'
 
 //资讯发布
-import informationPublish from '@/pages/page_lm/informationPublish/informationPublish'
-import informationList from '@/pages/page_lm/informationPublish/informationList'
-import addInformation from '@/pages/page_lm/informationPublish/addInformation'
-import informationUndergo from '@/pages/page_lm/informationPublish/informationUndergo'
+import informationPublish from '../pages/page_lm/informationPublish/informationPublish'
+import informationList from '../pages/page_lm/informationPublish/informationList'
+import addInformation from '../pages/page_lm/informationPublish/addInformation'
+import informationUndergo from '../pages/page_lm/informationPublish/informationUndergo'
 
 //学校用户管理
-import schoolManage from '@/pages/page_lm/schoolRegulate/schoolManage/schoolManage'
-import schoolList from '@/pages/page_lm/schoolRegulate/schoolManage/schoolList'
-import schoolAuditDetail from '@/pages/page_lm/schoolRegulate/schoolManage/schoolAuditDetail'
+import schoolManage from '../pages/page_lm/schoolRegulate/schoolManage/schoolManage'
+import schoolList from '../pages/page_lm/schoolRegulate/schoolManage/schoolList'
+import schoolAuditDetail from '../pages/page_lm/schoolRegulate/schoolManage/schoolAuditDetail'
 
 //课程审核
-import curriculumManage from '@/pages/page_lm/schoolRegulate/curriculumManage/curriculumManage'
-import curriculumList from '@/pages/page_lm/schoolRegulate/curriculumManage/curriculumList'
-import curriculumDetail from '@/pages/page_lm/schoolRegulate/curriculumManage/curriculumDetail'
+import curriculumManage from '../pages/page_lm/schoolRegulate/curriculumManage/curriculumManage'
+import curriculumList from '../pages/page_lm/schoolRegulate/curriculumManage/curriculumList'
+import curriculumDetail from '../pages/page_lm/schoolRegulate/curriculumManage/curriculumDetail'
 
 //教师审核
-import teacherManage from '@/pages/page_lm/schoolRegulate/teacherManage/teacherManage'
-import teacherList from '@/pages/page_lm/schoolRegulate/teacherManage/teacherList'
-import teacherDetail from '@/pages/page_lm/schoolRegulate/teacherManage/teacherDetail'
+import teacherManage from '../pages/page_lm/schoolRegulate/teacherManage/teacherManage'
+import teacherList from '../pages/page_lm/schoolRegulate/teacherManage/teacherList'
+import teacherDetail from '../pages/page_lm/schoolRegulate/teacherManage/teacherDetail'
 
 //资讯审核
-import informationManage from '@/pages/page_lm/schoolRegulate/informationManage/informationManage'
-import informationListMange from '@/pages/page_lm/schoolRegulate/informationManage/informationListMange'
-import informationDetail from '@/pages/page_lm/schoolRegulate/informationManage/informationDetail'
+import informationManage from '../pages/page_lm/schoolRegulate/informationManage/informationManage'
+import informationListMange from '../pages/page_lm/schoolRegulate/informationManage/informationListMange'
+import informationDetail from '../pages/page_lm/schoolRegulate/informationManage/informationDetail'
 
 //学校相册审核
-import schoolPhoneManage from '@/pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneManage'
-import schoolPhoneList from '@/pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneList'
-import schoolPhoneDetail from '@/pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneDetail'
+import schoolPhoneManage from '../pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneManage'
+import schoolPhoneList from '../pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneList'
+import schoolPhoneDetail from '../pages/page_lm/schoolRegulate/schoolPhoneManage/schoolPhoneDetail'
 
 //基础设置审核
-import basisSettingManage from '@/pages/page_lm/schoolRegulate/basisSettingManage/basisSettingManage'
-import basisSettingList from '@/pages/page_lm/schoolRegulate/basisSettingManage/basisSettingList'
-import basisSettingDetail from '@/pages/page_lm/schoolRegulate/basisSettingManage/basisSettingDetail'
+import basisSettingManage from '../pages/page_lm/schoolRegulate/basisSettingManage/basisSettingManage'
+import basisSettingList from '../pages/page_lm/schoolRegulate/basisSettingManage/basisSettingList'
+import basisSettingDetail from '../pages/page_lm/schoolRegulate/basisSettingManage/basisSettingDetail'
 
 
 //基础设置审核
-import coupleBack from '@/pages/page_lm/coupleBack/coupleBack'
-import coupleBackList from '@/pages/page_lm/coupleBack/coupleBackList'
-import coupleBackDetail from '@/pages/page_lm/coupleBack/coupleBackDetail'
+import coupleBack from '../pages/page_lm/coupleBack/coupleBack'
+import coupleBackList from '../pages/page_lm/coupleBack/coupleBackList'
+import coupleBackDetail from '../pages/page_lm/coupleBack/coupleBackDetail'
 
 //保证金
-import pledgeMoney from '@/pages/page_lm/pledgeMoney/pledgeMoney'
-import pledgeVIP from '@/pages/page_lm/pledgeMoney/pledgeVIP'
+import pledgeMoney from '../pages/page_lm/pledgeMoney/pledgeMoney'
+import pledgeVIP from '../pages/page_lm/pledgeMoney/pledgeVIP'
 
 //主题广告位
-import slideshow from '@/pages/page_lm/advertising/slideshow'
+import slideshow from '../pages/page_lm/advertising/slideshow'
 
 //首页推荐课程
-import recommend from '@/pages/page_lm/advertising/recommend/recommend'
-import selectSchool from '@/pages/page_lm/advertising/recommend/selectSchool'
+import recommend from '../pages/page_lm/advertising/recommend/recommend'
+import recommendList from '../pages/page_lm/advertising/recommend/list'
+import selectSchool from '../pages/page_lm/advertising/recommend/selectSchool'
 
 //个人中心广告位
-import personageCenter from '@/pages/page_lm/advertising/personageCenter'
+import personageCenter from '../pages/page_lm/advertising/personageCenter'
 
-//个人中心广告位
-import BottomImg from '@/pages/page_lm/advertising/BottomImg'
+//底部广告位
+import BottomImg from '../pages/page_lm/advertising/BottomImg'
 
-//个人中心广告位
-import loginBgImg from '@/pages/page_lm/advertising/loginBgImg'
+//登陆背景广告位
+import loginBgImg from '../pages/page_lm/advertising/loginBgImg'
+
+//app登陆广告位
+import appBgImg from '../pages/page_lm/advertising/appBgImg'
 
 
 export default [
@@ -132,16 +136,24 @@ export default [
   //主题广告位
   {path:'slideshow',name:'slideshow',component:slideshow},
   
-  ////首页推荐课程
-  {path:'recommend',name:'recommend',component:recommend},
-  {path:'selectSchool',name:'selectSchool',component:selectSchool},
+  //首页推荐课程
+  {path:'recommend',component:recommend,children:[
+    {path:'',name:'recommendList',component:recommendList},
+    {path:'selectSchool',name:'selectSchool',component:selectSchool},
+    {path:'curriculumDetail',component:curriculumDetail},
+    {path:'schoolAuditDetail',component:schoolAuditDetail},
+  ]},
+
 
   //个人中心广告位
   {path:'personageCenter',name:'personageCenter',component:personageCenter},
 
-  //个人中心广告位
+  //底部广告位
   {path:'BottomImg',name:'BottomImg',component:BottomImg},
 
-  //个人中心广告位
+  //登陆背景广告位
   {path:'loginBgImg',name:'loginBgImg',component:loginBgImg},
+
+  //app登陆广告位
+  {path:'appBgImg',name:'appBgImg',component:appBgImg},
 ]

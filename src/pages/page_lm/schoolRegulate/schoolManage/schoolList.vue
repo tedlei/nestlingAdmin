@@ -7,6 +7,7 @@
         </div>
         <div class="sm_right_select">
           <el-select v-model="province" placeholder="请选择">
+            <el-option key="请选择" label="请选择" value=""></el-option>
             <el-option
               v-for="item in provinceList"
               :key="item"
@@ -15,6 +16,7 @@
             </el-option>
           </el-select>
           <el-select v-model="city" v-if="cityList.length>0" placeholder="请选择">
+            <el-option key="请选择" label="请选择" value=""></el-option>
             <el-option
               v-for="item in cityList"
               :key="item"
@@ -50,14 +52,14 @@
         </thead>
         <tbody>
           <tr v-for="(item,i) of schoolList" :key="i">
-            <td>{{item.schoolName}}</td>
-            <td>{{item.shneghe===1?'未审核':'审核通过'}}</td>
+            <td>{{item.organizationName}}</td>
+            <td>{{item.schoolStatus*1===3?'审核通过':'未审核'}}</td>
             <td class="sm_td_ck" @click="topLookOver(item.id)">查看</td>
             <template v-if="!isAptitudeAudit">
               <td v-if="btnNum!==3" class="sm_td_jyAndsc" @click="topForbidden(item.id,btnNum)">{{btnNum===1?'禁用':btnNum===2?'取消禁用':''}}</td>
-              <td v-if="btnNum!==2" class="sm_td_jyAndsc" @click="topDelete(item.id,btnNum)">{{btnNum===1?'删除':btnNum===3?'删除恢复':''}}</td>
+              <td v-if="btnNum!==2" class="sm_td_jyAndsc" @click="topForbidden(item.id,btnNum+2)">{{btnNum===1?'删除':btnNum===3?'删除恢复':''}}</td>
             </template>
-            <td v-else>2019-01-03 10：30：20</td>
+            <td v-else>{{item.createTime}}</td>
           </tr>
         </tbody>
       </table>
@@ -104,7 +106,6 @@ export default {
   created(){
     this.topSearch();
     this.getprovinceList();
-    console.log(123)
   },
 
   methods: {
@@ -123,26 +124,28 @@ export default {
     //获取学校数据
     topSearch(){
       this.schoolList = [];
-      let obj = {btnNum:this.btnNum,atPresentNum:this.atPresentNum,pageData:this.pageData};
-      if(this.province) obj.province = this.province;
-      if(this.city) obj.city = this.city;
-      if(this.searchTeacher) obj.searchTeacher = this.searchTeacher;
-      let topSearch = this.isAptitudeAudit;
-      if(topSearch){
-        this.schoolList = [
-          {id:100001,schoolName:'重庆大学',shneghe:1},
-          {id:100001,schoolName:'重庆大学',shneghe:1},
-          {id:100001,schoolName:'重庆大学',shneghe:1},
-          {id:100001,schoolName:'重庆大学',shneghe:1},
-        ]
-      }else{
-        this.schoolList = [
-          {id:100001,schoolName:'重庆大学',shneghe:2},
-          {id:100001,schoolName:'重庆大学',shneghe:2},
-          {id:100001,schoolName:'重庆大学',shneghe:2},
-          {id:100001,schoolName:'重庆大学',shneghe:2},
-        ]
+      let url = '/school/findByPage.do'
+      let data = {
+        keywords:this.searchTeacher,
+        oneAddress:this.province,
+        twoAddress:this.city,
+        pageNo:''+this.atPresentNum,
+        pageSize:''+this.pageData,
+        schoolStatus:'3'
       }
+      if(this.btnNum === 2){
+        data.schoolStatus = '4';
+      }
+      if(this.btnNum === 3){
+        data.schoolStatus = '6';
+      }
+      if(this.isAptitudeAudit){
+        data.schoolStatus = '1'
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        this.allDataNum = res.data.total;
+        this.schoolList = res.data.rows;
+      })
     },
 
     //查看
@@ -151,22 +154,35 @@ export default {
     },
 
     //禁用
-    topForbidden(id,btnNum){
+    topForbidden(schoolId,btnNum){
+      let url = '/school/updateStatus.do';
+      let data = {schoolId,status:'4'};
       let str1 = '是否禁用该用户？该操作会让学校用户信息无法在客户端显示，请谨慎操作！'
       let str2 = '已禁用该用户'
       if(btnNum===2){
         str1 = '是否取消对该用户的禁用操作？'
         str2 = '该用户禁用已取消'
+        data.status = '5';
+      }
+      if(btnNum===3){
+        str1 = '是否删除该用户?该操作会让学校用户无法登陆，请谨慎操作！'
+        str2 = '已删除该用户'
+        data.status = '6';
+      }
+      if(btnNum===5){
+        str1 = '是否恢复该用户数据？'
+        str2 = '该用户已恢复'
+        data.status = '7';
       }
       MessageBox.confirm(str1, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: str2
-        });
+        this.fetch({url,data,method:'get'},6).then(res=>{
+          console.log(res.data);
+          // this.topSearch()
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -176,29 +192,30 @@ export default {
     },
 
     //删除
-    topDelete(id,btnNum){
-      let str1 = '是否删除该用户?该操作会让学校用户无法登陆，请谨慎操作！'
-      let str2 = '已删除该用户'
-      if(btnNum===3){
-        str1 = '是否恢复该用户数据？'
-        str2 = '该用户已恢复'
-      }
-      MessageBox.confirm(str1, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: str2
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消删除操作'
-        });          
-      });
-    },
+    // topDelete(id,btnNum){
+    //   console.log(id,btnNum,456)
+    //   let str1 = '是否删除该用户?该操作会让学校用户无法登陆，请谨慎操作！'
+    //   let str2 = '已删除该用户'
+    //   if(btnNum===3){
+    //     str1 = '是否恢复该用户数据？'
+    //     str2 = '该用户已恢复'
+    //   }
+    //   MessageBox.confirm(str1, '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     this.$message({
+    //       type: 'success',
+    //       message: str2
+    //     });
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '取消删除操作'
+    //     });          
+    //   });
+    // },
 
     //获取分页数
     topClick(num){
@@ -216,11 +233,18 @@ export default {
       this.province = '';
     },
     'province':function(val){
-      if(!val)return
+      if(!val){
+        this.city = '';
+        this.cityList = [];
+        return
+      }
       this.getCityList(val);
       this.topSearch();
     },
     "city":function(){
+      this.topSearch();
+    },
+    "btnNum":function(){
       this.topSearch();
     }
   }

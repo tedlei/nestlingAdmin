@@ -6,11 +6,13 @@
           <span>学校全称</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">重庆龙丰教育学校</span>
-
-          <span class="cum_li_span_j">普通入驻+保证金+学校年费VIP</span>
-          <span class="cum_li_span_j">金牌合作</span>
-          <span class="cum_li_span_j">诚信保证</span>
+          <span class="cum_li_span">{{currObj.organizationName}}</span>
+          <template v-if="currObj.schoolCooperation">
+            <span 
+              class="cum_li_span_j" 
+              v-for="(str,i) of currObj.schoolCooperation.split(',')"
+              :key="i">{{str}}</span>
+          </template>
         </div>
       </li>
       <li class="cum_li fx">
@@ -18,7 +20,7 @@
           <span>课程名称</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">小学语文一对一辅导</span>
+          <span class="cum_li_span">{{currObj.courseName}}</span>
         </div>
       </li>
       <li class="cum_li li_width fx">
@@ -27,7 +29,7 @@
         </div>
         <div class="cum_li_right">
           <div class="cum_li_img">
-            <img src="" alt="正在加载……">
+            <img :src="currObj.courseImage" alt="正在加载……">
           </div>
         </div>
       </li>
@@ -36,9 +38,9 @@
           <span>课程价格</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">2800元</span>
-          <span class="cum_li_span_z">展示:</span>
-          <span class="cum_li_span">直接展示</span>
+          <span class="cum_li_span">{{currObj.coursePrice}}元</span>
+          <el-radio class="elRadio" :disabled="auditPass" v-model="currObj.courseHidePrice" label="0">直接展示</el-radio>
+          <el-radio :disabled="auditPass" v-model="currObj.courseHidePrice" label="1">预约后展示</el-radio>
         </div>
       </li>
       <li class="cum_li fx">
@@ -46,7 +48,7 @@
           <span>上课时间</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">不限</span>
+          <span class="cum_li_span">{{currObj.courseTime}}</span>
         </div>
       </li>
       <li class="cum_li fx">
@@ -54,7 +56,7 @@
           <span>上课地点</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">重庆市江北区观音桥浩博天庭11号18-2</span>
+          <span class="cum_li_span">{{currObj.courseAddress}}</span>
         </div>
       </li>
       <li class="cum_li fx">
@@ -62,7 +64,7 @@
           <span>学习周期</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">3个月</span>
+          <span class="cum_li_span">{{currObj.coursePeriod}}</span>
         </div>
       </li>
       <li class="cum_li fx">
@@ -70,24 +72,16 @@
           <span>课程等级</span>
         </div>
         <div class="cum_li_right">
-          <span class="cum_li_span">不限</span>
+          <span class="cum_li_span">{{currObj.courseGrade}}</span>
         </div>
       </li>
 
       <li class="cum_li li_width fx">
         <div class="cum_li_left">
-          <span>学校资质</span>
+          <span>教学目标</span>
         </div>
         <div class="cum_li_right minHeight">
-          <div class="cum_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-          </div>
+          <div class="cum_li_text" v-html="currObj.courseTarget"></div>
         </div>
       </li>
       <li class="cum_li li_width fx">
@@ -95,15 +89,7 @@
           <span>学校资质</span>
         </div>
         <div class="cum_li_right minHeight">
-          <div class="cum_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-          </div>
+          <div class="cum_li_text" v-html="currObj.courseContent"></div>
         </div>
       </li>
     </ul>
@@ -134,6 +120,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import {Radio} from 'element-ui'
+Vue.use(Radio)
 export default {
   props:['auditPass'],
   data () {
@@ -141,9 +130,23 @@ export default {
       isForbiddenBnt:false,   //是否禁用按钮
       isShowTc:false,   //是否显示弹窗
       textarea:'',
+      currObj:{},    //课程详情
     };
   },
+  created() {
+    this.getCurr(this.$route.query.num);
+  },
   methods: {
+    //获取课程详情
+    getCurr(id){
+      let url = '/curri/findById.do';
+      let data = {id,sourceType:'2'};
+      this.fetch({url,data,method:'get'},1).then(res=>{
+        console.log(res.data[0])
+        this.currObj = res.data[0]
+      })
+    },
+
     //审核
     topAudit(boole){
       this.isForbiddenBnt = true;
@@ -199,10 +202,13 @@ export default {
           font-size: 16px;
           color:rgba(51,51,51,1);
         }
+        .elRadio{
+          margin-left: 40px;
+        }
         .cum_li_span_j{
           margin-left: 20px;
+          padding:0 10px;
           display:inline-block;
-          // width:90px;
           height:26px;
           background:rgba(255,228,214,1);
           text-align: center;
@@ -216,8 +222,13 @@ export default {
           margin-left: 30px;
         }
         .cum_li_text{
+          padding-right: 0;
           width: 100%;
           height: 100%;
+          img{
+            display:block;
+            margin: auto;
+          }
         }
         .cum_li_img{
           width:220px;

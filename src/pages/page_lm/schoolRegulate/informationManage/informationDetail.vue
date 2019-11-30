@@ -55,7 +55,7 @@
         </div>
       </li>
     </ul>
-    <div class="iam_btn">
+    <div class="iam_btn" v-if="!auditPass">
       <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button>
       <el-button :disabled="isForbiddenBnt" class="iam_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button>
       <div class="iam_tc fx" v-show="isShowTc" @click="topCloseTc">
@@ -83,6 +83,7 @@
 
 <script>
 export default {
+  props:['auditPass'],
   data () {
     return {
       isForbiddenBnt:false,   //是否禁用按钮

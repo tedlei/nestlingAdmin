@@ -1,32 +1,27 @@
 <template>
   <div class="acli-app fx">
-    <div class="ssh_d1">
-      <template v-for="(item,i) of topTitleList">
-        <span :key="i" class="ssh_d1_span">
-          {{item.title}}
-        </span>
-      </template>
-    </div>
     <div class="sels_input">
       <el-input v-model="input" placeholder="请输入内容"></el-input>
-      <el-button type="primary">主要按钮</el-button>
+      <el-button type="primary" @click="getcurrList">主要按钮</el-button>
     </div>
     <div class="tm_table">
       <table class="layui-table">
         <thead>
           <tr>
             <th>学校名称</th>
-            <th>课程名称</th>
+            <th>{{query.place*1===1?"课程数量":"课程名称"}}</th>
             <th>内容详情</th>
             <th>设置</th>
           </tr> 
         </thead>
         <tbody>
           <tr v-for="(item,i) of schoolList" :key="i">
-            <td>{{item.schoolName}}</td>
-            <td>{{item.currName}}</td>
-            <td class="tm_td_ck" @click="topLookOver(item.id)">查看</td>
-            <td class="tm_td_ck" >设置</td>
+            <template v-if="item.id!==query.url">
+              <td>{{item.organizationName}}</td>
+              <td>{{query.place*1===1?item.subjectNum:item.courseName}}</td>
+              <td class="tm_td_ck" @click="topLookOver(item.id)">查看</td>
+              <td class="tm_td_ck" @click="settingGG(item)">设置</td>
+            </template>
           </tr>
         </tbody>
       </table>
@@ -37,7 +32,10 @@
         layout="prev, pager, next"
         prev-text="上一页"
         next-text="下一页"
-        :total="1000">
+        @current-change = "topUpdate"
+        :page-size="pageSize"
+        :current-page="pageNo"
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -48,55 +46,98 @@ export default {
   data () {
     return {
       topTitleList:[{title:'首页广告设置'}],    //顶部抬头显示
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',
+      input: '',   //搜索
 
-      schoolList:[
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,schoolName:'重庆大学',currName:'小学课程',shneghe:1,date:'2019-9-2 10:14:14'},
-      ]
+      schoolList:[],    //课程或学校列表
+
+      pageNo:1,   //当前页
+      pageSize:20,   //页条数
+      total:0,   //总条数
+
+      query:{},   //上一个页面参数
     };
   },
   created(){
-    console.log(this.$route.query)
+    this.getParam(this.$route.query)
   },
   methods: {
     //查看
     topLookOver(id){
-      this.push({path:'teacherManage/teacherDetail',query:{num:id,id:this.$route.query.id}})
+      this.push({
+        path:'/index/recommend/'+this.query.place*1===1?'schoolAuditDetail':'curriculumDetail',
+        query:this.query
+      })
     },
+
+    //或上一个页面参数
+    getParam(query){
+      this.query = query;
+      this.getcurrList();
+    },
+
+    getcurrList(){
+      let title = '';
+      let url = '/curri/findByName.do';
+      let data = {pageNo:''+this.pageNo,pageSize:''+this.pageSize,keywords:this.input};
+      let urlNum = 1;
+      this.schoolList = [];
+      if(this.query.place*1 === 0){
+        switch(this.query.num*1){
+          case 0 : title = '小学';
+            break
+          case 1 : title = '中学';
+            break
+          case 2 : title = '艺术';
+            break
+          case 3 : title = '学历';
+            break
+          case 4 : title = '职业';
+            break
+          case 5 : title = '其他';
+            break
+        }
+        data.name = title;
+        // data = {name:title,pageNo:''+this.pageNo,pageSize:''+this.pageSize,keywords:this.input};
+      }
+      if(this.query.place*1 === 1){
+        urlNum = 6;
+        data.schoolStatus = '3';
+        url = '/school/findByPage.do';
+      }
+      // if(this.query.place*1 === 2){
+      //   data = {pageNo:''+this.pageNo,pageSize:''+this.pageSize,keywords:this.input};
+      // }
+      this.fetch({url,data,method:'post'},urlNum).then(res=>{
+        this.schoolList = res.data.rows;
+        this.total = res.data.total
+      })
+    },
+
+    //切换分页时
+    topUpdate(num){
+      this.pageNo = num;
+      this.getcurrList();
+    },
+
+    //设置广告
+    settingGG(item){
+      let url = '/content/update.do';
+      let query = this.query;
+      let data = [{
+        categoryId:''+(query.place+1), //广告类目id
+        title:query.title,      //标题
+        url:item.id,        //连接
+        sortOrder:''+(query.num+1)   //位置
+      }]
+      console.log(data)
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {message,success} = res.data;
+        if(success){
+          this.push({path:'/index/recommend',query:{id:query.id}})
+        }
+        this.$message({message,type:success?'success':'warning'});
+      })
+    }
   }
 
 }
@@ -105,23 +146,8 @@ export default {
 
 <style lang='less'>
 .acli-app{
-  padding:20px;
-  padding-top: 20px;
-  position: relative;
-  flex-direction: column;
-  width: 100%;
   height: 100%;
-  overflow-y: auto;
-  background: white;
-  .ssh_d1{
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(230,230,230,1);
-    position: relative;
-    .ssh_d1_span{
-      font-size: 18px;
-      color:rgba(51,51,51,1);
-    }
-  }
+  flex-direction: column;
   .sels_input{
     padding-top: 20px;
     .el-input{

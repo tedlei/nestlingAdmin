@@ -12,7 +12,7 @@
       </span>
       <el-button v-if="topTitleList.length>1" class="iam_btn iam_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>
-    <router-view></router-view>
+    <router-view :auditPass='auditPass'></router-view>
   </div>
 </template>
 

@@ -8,7 +8,7 @@
                 <span>欢迎，大帅哥</span>
             </li>
             <li class="pointer">
-                <span style="color: #f60;">退出</span>
+                <span style="color: #f60;" @click="topLogin">退出</span>
             </li>
         </ul>
     </div>
@@ -22,6 +22,11 @@
             this.$refs.head.style.height = 80 / 1920 * w + 'px';
 
             this.$refs.log.style.width = 300 / 1920 * w + 'px';
+        },
+        methods:{
+            topLogin(){
+                this.push('/login');
+            }
         }
     }
 </script>

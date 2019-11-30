@@ -57,11 +57,8 @@ export default {
   },
   methods: {
     //审核
-    topAudit(boole){
-      if(boole){
-        this.$message({message:'审核通过',type:'success'});
-      }else{
-      }
+    topAudit(num){
+      this.$message({message:num===-1?'上一条':'下一条',type:'success'});
     },
 
    

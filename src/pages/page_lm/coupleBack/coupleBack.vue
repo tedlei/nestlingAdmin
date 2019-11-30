@@ -2,13 +2,12 @@
   <div class="cbDm-app fx">
     <div class="cb_d1">
       <template v-for="(item,i) of topTitleList">
-        <span :key="i" class="cb_d1_span">
+        <span :key="i" class="cb_d1_span" :class="item.src?'cur':''" @click="topBack(item.src)">
           {{item.title}}
         </span>
+        <i :key="i+'1'" v-if="item.src" class="el-icon-arrow-right"></i>
       </template>
-      <!-- <span class="cb_d1_btn" v-show="isShowBtn">
-        <el-button class="cb_btn" type="primary" @click="topAudit">{{auditPass?'未审核':'审核通过列表'}}</el-button>
-      </span> -->
+      <el-button v-if="topTitleList.length>1" class="bsm_btn cd_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>
     <router-view></router-view>
   </div>
@@ -26,8 +25,6 @@ export default {
   data () {
     return {
       topTitleList:[{title:'问题反馈'}],    //顶部抬头显示
-      auditPass:false,   //true:  审核通过    false：未审核
-      // isShowBtn:true,   //是否显示按钮
     };
   },
 
@@ -39,14 +36,16 @@ export default {
     //是否显示按钮
     getId(obj){
       let num = obj.query.num;
-      // console.log(num)
-      // this.isShowBtn = num?false:true;
+      if(num)
+        this.topTitleList=[{title:'问题反馈',src:'coupleBackDetail'},{title:'问题反馈详情'}]
+      else
+        this.topTitleList=[{title:'问题反馈'}]
     },
-
-    //切换列表
-    // topAudit(){
-    //   this.auditPass = !this.auditPass;
-    // }
+    //点击返回
+    topBack(src){
+      if(!src) return
+      this.$router.go(-1);
+    },
   },
   watch: {
     $route:function(val){
@@ -74,11 +73,17 @@ export default {
       font-size: 18px;
       color:rgba(51,51,51,1);
     }
-    // .cb_d1_btn{
-    //   position:absolute;
-    //   top: -7px;
-    //   right: 20px;
-    // }
+    .cur{
+      cursor: pointer;
+    }
+    .cur:active{
+      color:rgb(191,191,191);
+    }
+    .cd_d1_btn{
+      position:absolute;
+      top: -7px;
+      right: 20px;
+    }
   }
 }
 </style>

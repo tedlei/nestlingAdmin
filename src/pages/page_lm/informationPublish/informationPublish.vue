@@ -1,14 +1,21 @@
 <template>
   <div class="tepu-app fx" ref="tepu_app">
     <div class="tepu_d1">
-      <router-link to="/index/teacherPublish?id=3" v-if="urlList.length>0">资讯发布</router-link>
+      <!-- <router-link to="/index/teacherPublish?id=3" v-if="urlList.length>0">资讯发布</router-link>
       <span v-else>资讯发布</span>
       <template v-for="(item,i) of urlList">
         <span :key="i">>
           <router-link :to="item.url+'?id=3'" v-if="item.url">{{item.name}}</router-link>
           <span v-else>{{item.name}}</span>
         </span>
+      </template> -->
+      <template v-for="(item,i) of topTitleList">
+        <span :key="i" class="tepu_d1_span" :class="item.src?'cur':''" @click="topBack(item.src)">
+          {{item.title}}
+        </span>
+        <i :key="i+'1'" v-if="item.src" class="el-icon-arrow-right"></i>
       </template>
+      <el-button v-if="topTitleList.length>1" class="tepu_btn tepu_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>
 
     <router-view class="tepu_view"></router-view>
@@ -19,32 +26,41 @@
 export default {
   data () {
     return {
+      topTitleList:[{title:'学校教师审核'}],    //顶部抬头显示
       urlList:[],
     };
   },
-  mounted(){
-     this.getUrl(this.$route.path)
+ created(){
+    this.getId(this.$route);
   },
+
   methods: {
-    getUrl(url){
-      this.urlList = [] 
-      let arr = url.slice(7).split('/');
-      // if(arr.indexOf('addTeacher')!==-1)this.urlList=[{name:'添加教师'}]
-      // if(arr.indexOf('teacherUndergo')!==-1)
-      //   this.urlList=[
-      //     {name:'添加教师',url:'/index/teacherPublish/addTeacher?id=3'},
-      //     {name:'教师经历添加'}
-      //   ]
-      // console.log(this.urlList)
+     //是否显示按钮
+    getId(obj){
+      let str = obj.path;
+      console.log(str)
+      // let num = obj.query.num;
+      // if(num)
+      //   this.topTitleList=[{title:'学校课程审核',src:'curriculumManage'},{title:'学校设置详情'}]
+      // else
+      //   this.topTitleList=[{title:'学校课程审核'}]
+    },
+    //点击返回
+    topBack(src){
+      if(!src) return
+      this.$router.go(-1);
+    },
+
+    //切换列表
+    topAudit(){
+      this.auditPass = !this.auditPass;
     }
   },
-
-  watch:{
-    $route:function(path){
-      this.getUrl(path.path);
+  watch: {
+    $route:function(val){
+      this.getId(val);
     }
-  }
-
+  },
 }
 
 </script>

@@ -127,6 +127,10 @@
                           {
                               text: '登录背景图广告位',
                               optionUrl: 'loginBgImg'
+                          },
+                          {
+                              text: 'APP广告位',
+                              optionUrl: 'appBgImg'
                           }
                       ]
                   }

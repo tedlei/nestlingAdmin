@@ -15,7 +15,7 @@
           <tr v-for="(item,i) of schoolList" :key="i">
             <td>{{item.phone}}</td>
             <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'已审核':''}}</td>
+            <td>{{item.shneghe===1?'未查看':'已查看'}}</td>
             <td class="cb_td_ck" @click="topLookOver(item.id)">查看</td>
             <td>{{item.date}}</td>
           </tr>
@@ -64,13 +64,13 @@ export default {
         {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
         {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
         {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
       ]
     };
   },

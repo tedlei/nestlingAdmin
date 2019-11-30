@@ -132,7 +132,7 @@ export default {
       let id = obj.query.id;
       id = (id==='2'?'2-0':id);
       this.topTitleList = [];
-      if(id==='2-0'){
+      if(id==='2-0'||id==='7-1'){
         this.isShowBtn = false;
         this.$message({message:'增删管理查看'})
       }else{
@@ -200,6 +200,7 @@ export default {
         }
         .sm_li_span_j{
           margin-left: 20px;
+          padding:0 10px;
           display:inline-block;
           height:26px;
           background:rgba(255,228,214,1);
