@@ -1,7 +1,7 @@
 <template>
   <div class="iam-app">
     <ul class="iam_ul">
-      <li class="iam_li fx">
+      <!-- <li class="iam_li fx">
         <div class="iam_li_left">
           <span>学校全称</span>
         </div>
@@ -12,21 +12,21 @@
           <span class="iam_li_span_j">金牌合作</span>
           <span class="iam_li_span_j">诚信保证</span>
         </div>
+      </li> -->
+      <li class="iam_li fx">
+        <div class="iam_li_left">
+          <span>标题</span>
+        </div>
+        <div class="iam_li_right">
+          <span class="iam_li_span">{{infoObj.schoolTopic}}</span>
+        </div>
       </li>
       <li class="iam_li fx">
         <div class="iam_li_left">
           <span>资讯分类</span>
         </div>
         <div class="iam_li_right">
-          <span class="iam_li_span">学前辅导</span>
-        </div>
-      </li>
-      <li class="iam_li fx">
-        <div class="iam_li_left">
-          <span>标题</span>
-        </div>
-        <div class="iam_li_right">
-          <span class="iam_li_span">对于幼儿，家长该如何让幼儿吃饭？</span>
+          <span class="iam_li_span">{{infoObj.schoolMessage}}</span>
         </div>
       </li>
       <li class="iam_li fx">
@@ -34,7 +34,7 @@
           <span>作者</span>
         </div>
         <div class="iam_li_right">
-          <span class="iam_li_span">重庆工商大学</span>
+          <span class="iam_li_span">{{infoObj.schoolAuthor}}</span>
         </div>
       </li>
       
@@ -43,21 +43,13 @@
           <span>资讯内容</span>
         </div>
         <div class="iam_li_right minHeight">
-          <div class="iam_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-          </div>
+          <div class="iam_li_text" v-html="infoObj.schoolContent"></div>
         </div>
       </li>
     </ul>
     <div class="iam_btn" v-if="!auditPass">
-      <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button>
-      <el-button :disabled="isForbiddenBnt" class="iam_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button>
+      <!-- <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button> -->
+      <el-button :disabled="isForbiddenBnt" class="iam_btn_left" type="primary" @click="topAudit(true)">下架</el-button>
       <div class="iam_tc fx" v-show="isShowTc" @click="topCloseTc">
         <div class="iam_tc_d">
           <p class="iam_tc_p fx">
@@ -89,17 +81,26 @@ export default {
       isForbiddenBnt:false,   //是否禁用按钮
       isShowTc:false,   //是否显示弹窗
       textarea:'',
+      infoObj:{},
     };
   },
+  created() {
+    let {num} = this.$route.query;
+    this.getInfoObj(num);
+  },
   methods: {
-    //审核
+    //查询资讯详细
+    getInfoObj(id){
+      let url = '/getMessage/byId.do';
+      let data = {id};
+      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+        this.infoObj = res.data;
+      })
+    },
+    
+    //下架
     topAudit(boole){
-      this.isForbiddenBnt = true;
-      if(boole){
-        this.$message({message:'审核通过',type:'success'});
-      }else{
-        this.isShowTc = true;
-      }
+      this.isShowTc = boole
     },
 
     //关闭弹窗
@@ -111,16 +112,29 @@ export default {
 
     //点击弹窗确认时
     topNotarize(){
+      let url = '/getMessage/update.do';
+      let data = {
+        id:this.infoObj.id,
+        schoolId:this.infoObj.schoolId,
+        message:this.textarea
+      };
       let textarea = this.textarea
       if(!textarea.replace(/\s*/g,"")){
         this.$message({message:'请输入原因！',type:'warning'});
         return
       }
-      this.isShowTc = false;
-      this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      // console.log(data);
+      // return 
+      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+        let {message,success} = res.data;
+        if(success){
+          this.push({path:'/index/informationManage',query:{id:this.$route.query.id}})
+        }
+        this.$message({message,type:success?'success':'warning'});
+        this.isShowTc = false;
+      })
     },
   }
-
 }
 
 </script>
@@ -142,6 +156,7 @@ export default {
         color:rgba(102,102,102,1);
       }
       .iam_li_right{
+        flex: 1;
         margin-left: 40px;
         .iam_li_span{
           font-size: 16px;
@@ -159,9 +174,17 @@ export default {
           border-radius:3px;
         }
         .iam_li_text{
-          padding-right: 35px;
+          padding-right: 10px;
           width: 100%;
           height: 100%;
+          overflow: hidden;
+          img{
+            display: block;
+            // display: none;
+            // margin: auto;
+            // max-width: 100%;
+
+          }
         }
       }
       .minHeight{

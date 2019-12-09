@@ -3,26 +3,28 @@
     <ul class="iam_ul">
       <li class="iam_li fx">
         <div class="iam_left_span">
-          <span>地区选择</span>
+          <span>分类选择</span>
         </div>
         <div class="iam_right_select">
-          <el-select v-model="province" placeholder="请选择">
+          <el-select v-model="infoClass">
+            <el-option key='' label="请选择" value=""></el-option>
             <el-option
-              v-for="item in provinceList"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-          <el-select v-model="city" placeholder="请选择">
-            <el-option
-              v-for="item in cityList"
+              v-for="item in infoClassList"
               :key="item"
               :label="item"
               :value="item">
             </el-option>
           </el-select>
         </div>
+      </li>
+      <li class="iam_li fx">
+        <div class="iam_left_span">
+          <span>搜索</span>
+        </div>
+        <div class="iam_right_input">
+          <el-input v-model="searchInfo" placeholder="请输入内容"></el-input>
+        </div>
+        <el-button class="iam_btn" type="primary" @click="topSearch">搜索</el-button>
       </li>
     </ul>
     <div class="iam_table">
@@ -37,10 +39,10 @@
         </thead>
         <tbody>
           <tr v-for="(item,i) of infoemList" :key="i">
-            <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'未审核':'已审核'}}</td>
+            <td>{{item.schoolTopic}}</td>
+            <td>{{item.schoolStatus*1===1?'已上架':'已下架'}}</td>
             <td class="iam_td_ck" @click="topLookOver(item.id)">查看</td>
-            <td>{{item.date}}</td>
+            <td>{{item.schoolTime}}</td>
           </tr>
         </tbody>
       </table>
@@ -66,21 +68,19 @@ export default {
   props:['auditPass'],
   data () {
     return {
-      provinceList: [],   //省列表
-      cityList: [],  //市列表
-      province:'',    //省
-      city:'',    //市
+      infoClassList:['学前资讯','小学资讯','中学资讯','艺术培训','学历提升','职业培训','资格证书','其他资讯'],  //资讯分类
+      infoClass:'',  
 
-      infoemList:[],   //获取课程数据
+      searchInfo:'',
+      infoemList:[],   //获取资讯数据
 
-      allDataNum:100,   //获取数据总条数
+      allDataNum:0,   //获取数据总条数
       atPresentNum:1,    //当前页数
       pageData:20,    //每页的数据条数
     };
   },
   created(){
     this.topSearch();
-    this.getprovinceList();
   },
   methods: {
     //查看
@@ -88,38 +88,24 @@ export default {
       this.push({path:'informationManage/informationDetail',query:{num:id,id:this.$route.query.id}})
     },
 
-    //获取省列表
-    getprovinceList(){
-      this.provinceList = chinaCityList['0'];
-      
-    },
-    //获取市列表
-    getCityList(val){
-      let list = chinaCityList['0'];
-      let num = list.indexOf(val);
-      this.cityList = chinaCityList['0_'+num]
-    },
-
+    //获取资讯列表
     topSearch(){
-      this.infoemList = [];
-      let obj = {auditPass:this.auditPass};
-      if(this.province) obj.province = this.province;
-      if(this.city) obj.city = this.city;
-      if(!this.auditPass){
-        this.infoemList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'}
-        ]
-      }else{
-        this.infoemList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'}
-        ]
+      let url = 'getMessage/message.do';
+      let data = {
+        type:this.infoClass,
+        status:'1',
+        pageSize:''+this.pageData,
+        pageNum:''+this.atPresentNum,
+        topic:this.searchInfo
+
+      };
+      if(this.auditPass){
+        data.status = '2'
       }
+      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+        this.infoemList = res.data.rows;
+        this.allDataNum = res.data.total;
+      })
     },
      //获取分页数
     topClick(num){
@@ -130,18 +116,11 @@ export default {
     'auditPass':function(){
       this.topSearch()
     },
-    'province':function(val){
-      if(!val)return
-      this.getCityList(val);
-      this.topSearch();
-    },
-    "city":function(){
-      this.topSearch();
+    'infoClass':function(){
+      this.topSearch()
     }
   }
-
 }
-
 </script>
 
 <style lang='less'>
@@ -156,6 +135,27 @@ export default {
         width: 80px;
         font-size: 16px;
         color:rgba(102,102,102,1);
+      }
+      .iam_right_input{
+        margin-left:10px;
+        width:376px;
+        height:50px;
+        background:rgba(255,255,255,1);
+        border:1px solid rgba(230,230,230,1);
+        border-radius:5px;
+        .el-input{
+          height: 100%;
+          .el-input__inner{
+            height: 100%;
+            border:0;
+            font-size: 16px;
+          }
+        }
+      }
+      .el-button{
+        width: 90px;
+        height: 50px;
+        margin-left: 20px;
       }
       .iam_right_select{
         margin-left:10px;

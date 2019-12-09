@@ -3,26 +3,27 @@
     <ul class="tm_ul">
       <li class="tm_li fx">
         <div class="tm_left_span">
-          <span>地区选择</span>
+          <span>授课类容</span>
         </div>
         <div class="tm_right_select">
-          <el-select v-model="province" placeholder="请选择">
+          <el-select v-model="stl" filterable placeholder="请选择">
             <el-option
-              v-for="item in provinceList"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-          <el-select v-model="city" placeholder="请选择">
-            <el-option
-              v-for="item in cityList"
+              v-for="item in selectTeachingList"
               :key="item"
               :label="item"
               :value="item">
             </el-option>
           </el-select>
         </div>
+      </li>
+      <li class="tm_li fx">
+        <div class="tm_left_span">
+          <span>搜索教师姓名</span>
+        </div>
+        <div class="tm_right_input">
+          <el-input v-model="searchTeacher" placeholder="请输入教师姓名"></el-input>
+        </div>
+        <el-button class="tm_btn" type="primary" @click="topSearch">搜索</el-button>
       </li>
     </ul>
     <div class="tm_table">
@@ -38,7 +39,7 @@
         <tbody>
           <tr v-for="(item,i) of teacherList" :key="i">
             <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'未审核':'已审核'}}</td>
+            <td>{{item.shneghe===1?'已上架':'已下架'}}</td>
             <td class="tm_td_ck" @click="topLookOver(item.id)">查看</td>
             <td>{{item.date}}</td>
           </tr>
@@ -62,14 +63,19 @@
 
 <script>
 import chinaCityList from '../../../../../static/js/chinaCityList.js'
+import data from './data.js'
 export default {
   props:['auditPass'],
   data () {
     return {
-      provinceList: [],   //省列表
-      cityList: [],  //市列表
-      province:'',    //省
-      city:'',    //市
+      // provinceList: [],   //省列表
+      // cityList: [],  //市列表
+      // province:'',    //省
+      // city:'',    //市
+      searchTeacher:'',
+
+      selectTeachingList:data,   //获取授课内容列表
+      stl:'',
 
       teacherList:[],   //获取课程数据
 
@@ -81,7 +87,7 @@ export default {
 
   created(){
     this.topSearch();
-    this.getprovinceList();
+    // this.getprovinceList();
   },
 
   methods: {
@@ -90,16 +96,16 @@ export default {
       this.push({path:'teacherManage/teacherDetail',query:{num:id,id:this.$route.query.id}})
     },
     //获取省列表
-    getprovinceList(){
-      this.provinceList = chinaCityList['0'];
+    // getprovinceList(){
+    //   this.provinceList = chinaCityList['0'];
       
-    },
+    // },
     //获取市列表
-    getCityList(val){
-      let list = chinaCityList['0'];
-      let num = list.indexOf(val);
-      this.cityList = chinaCityList['0_'+num]
-    },
+    // getCityList(val){
+    //   let list = chinaCityList['0'];
+    //   let num = list.indexOf(val);
+    //   this.cityList = chinaCityList['0_'+num]
+    // },
 
     topSearch(){
       this.teacherList = [];
@@ -131,14 +137,14 @@ export default {
     'auditPass':function(){
       this.topSearch()
     },
-    'province':function(val){
-      if(!val)return
-      this.getCityList(val);
-      this.topSearch();
-    },
-    "city":function(){
-      this.topSearch();
-    }
+    // 'province':function(val){
+    //   if(!val)return
+    //   this.getCityList(val);
+    //   this.topSearch();
+    // },
+    // "city":function(){
+    //   this.topSearch();
+    // }
   }
 
 }
@@ -175,6 +181,27 @@ export default {
         .el-select+.el-select{
           margin-left: 20px;
         }
+      }
+      .tm_right_input{
+        margin-left:10px;
+        width:376px;
+        height:50px;
+        background:rgba(255,255,255,1);
+        border:1px solid rgba(230,230,230,1);
+        border-radius:5px;
+        .el-input{
+          height: 100%;
+          .el-input__inner{
+            height: 100%;
+            border:0;
+            font-size: 16px;
+          }
+        }
+      }
+      .el-button{
+        width: 90px;
+        height: 50px;
+        margin-left: 20px;
       }
       // .tm_right_input{
       //   margin-left:10px;

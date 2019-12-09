@@ -126,9 +126,7 @@ export default {
       if(this.auditPass){
         data.basicsStatus='1'
       }
-      console.log(data)
       this.fetch({url,data,method:'post'},6).then(res=>{
-        console.log(res.data.rows)
         this.allDataNum = res.data.total;
         this.schoolList = res.data.rows;
       })

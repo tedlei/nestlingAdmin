@@ -7,9 +7,9 @@
         </span>
         <i :key="i+'1'" v-if="item.src" class="el-icon-arrow-right"></i>
       </template>
-      <span class="iam_d1_btn" v-show="isShowBtn">
-        <el-button class="iam_btn" type="primary" @click="topAudit">{{auditPass?'未审核':'审核通过列表'}}</el-button>
-      </span>
+      <!-- <span class="iam_d1_btn" v-show="isShowBtn">
+        <el-button class="iam_btn" type="primary" @click="topAudit">{{auditPass?'已上架列表':'已下架列表'}}</el-button>
+      </span> -->
       <el-button v-if="topTitleList.length>1" class="iam_btn iam_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>
     <router-view :auditPass='auditPass'></router-view>
@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       topTitleList:[{title:'学校资讯审核'}],    //顶部抬头显示
-      auditPass:false,   //true:  审核通过    false：未审核
+      auditPass:false,   //true:  已上架列表    已下架列表
       isShowBtn:true,   //是否显示按钮
     };
   },

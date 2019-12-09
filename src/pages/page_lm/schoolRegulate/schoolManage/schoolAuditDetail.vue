@@ -6,10 +6,10 @@
           <span>学校全称</span>
         </div>
         <div class="sm_li_right">
-          <span class="sm_li_span">重庆龙丰教育学校</span>
-          <span class="sm_li_span_j">普通入驻+保证金+学校年费VIP</span>
+          <span class="sm_li_span">{{schoolObj.organizationName}}</span>
+          <!-- <span class="sm_li_span_j">普通入驻+保证金+学校年费VIP</span>
           <span class="sm_li_span_j">金牌合作</span>
-          <span class="sm_li_span_j">诚信保证</span>
+          <span class="sm_li_span_j">诚信保证</span> -->
         </div>
       </li>
       <li class="sm_li fx">
@@ -17,8 +17,8 @@
           <span>特邀入驻</span>
         </div>
         <div class="sm_li_right">
+          <el-radio :disabled="!isShowBtn" v-model="radio" label="0">否</el-radio>
           <el-radio :disabled="!isShowBtn" v-model="radio" label="1">是</el-radio>
-          <el-radio :disabled="!isShowBtn" v-model="radio" label="2">否</el-radio>
         </div>
       </li>
       <li class="sm_li fx">
@@ -26,7 +26,7 @@
           <span>学校固话</span>
         </div>
         <div class="sm_li_right">
-          <span class="sm_li_span">023-61234567</span>
+          <span class="sm_li_span">{{schoolObj.schoolPhone}}</span>
         </div>
       </li>
       <li class="sm_li fx">
@@ -34,15 +34,15 @@
           <span>学校网址</span>
         </div>
         <div class="sm_li_right">
-          <span class="sm_li_span">www.cqlongfeng.com</span>
+          <span class="sm_li_span">{{schoolObj.schoolUrl}}</span>
         </div>
       </li>
       <li class="sm_li fx">
         <div class="sm_li_left">
           <span>主营行业</span>
         </div>
-        <div class="sm_li_right">
-          <span class="sm_li_span">学习辅导</span>
+        <div class="sm_li_right" v-if="schoolObj.schoolTrade">
+          <span class="sm_li_span sm_tow" v-for="(str,i) of JSON.parse(schoolObj.schoolTrade)" :key="i">{{str}}</span>
         </div>
       </li>
       <li class="sm_li fx">
@@ -50,7 +50,7 @@
           <span>授课地区</span>
         </div>
         <div class="sm_li_right">
-          <span class="sm_li_span">重庆市江北区</span>
+          <span class="sm_li_span">{{schoolObj.schoolAddress}}</span>
         </div>
       </li>
 
@@ -60,7 +60,7 @@
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
-            <img src="" alt="正在加载……">
+            <img :src="schoolObj.schoolAptitude" alt="正在加载……">
           </div>
         </div>
       </li>
@@ -70,7 +70,7 @@
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
-            <img src="" alt="正在加载……">
+            <img :src="schoolObj.schoolLogo" alt="正在加载……">
           </div>
         </div>
       </li>
@@ -80,7 +80,7 @@
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
-            <img src="" alt="正在加载……">
+            <img :src="schoolObj.schoolCertificate" alt="正在加载……">
           </div>
         </div>
       </li>
@@ -116,17 +116,30 @@ export default {
   props:['btnNum'],
   data () {
     return {
-      radio:'2',
+      schoolObj:{},  //学校资料
+
+      radio:'0',
+      textarea:'',     //不通过原因
+
       isForbiddenBnt:false,   //是否禁用按钮
       isShowTc:false,   //是否显示弹窗
-      textarea:'',
       isShowBtn:false,   //是否显示按钮
     };
   },
   created(){
+    let num = this.$route.query.num;
+    this.getSchoolDetail(num);
     this.getId(this.$route);
   },
   methods: {
+    //获取学校数据
+    getSchoolDetail(num){
+      let url = "/schooluser/getSh.do";
+      this.fetch({url,data:{userid:num},method:'post'},'http://192.168.3.63:9101').then((res)=>{
+        this.schoolObj = res.data;
+      })
+    },
+
     //判断是管理还是审核
     getId(obj){
       let id = obj.query.id;
@@ -144,7 +157,7 @@ export default {
     topAudit(boole){
       this.isForbiddenBnt = true;
       if(boole){
-        this.$message({message:'审核通过',type:'success'});
+        this.schoolAudit();
       }else{
         this.isShowTc = true;
       }
@@ -165,10 +178,34 @@ export default {
         return
       }
       this.isShowTc = false;
-      this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      this.schoolAudit(textarea);
     },
-  }
 
+    //审核
+    schoolAudit(message){
+      let url = '/school/updateStatus.do';
+      let data = {
+        status:'3',
+        schoolId:this.$route.query.num,
+        invited:this.radio
+      }
+      if(message){
+        data.status='2';
+        data.message = message;
+      }
+      console.log(data);
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {message,success} = res.data;
+        let {id} = this.$route.query;
+        this.isForbiddenBnt = false;
+        console.log(res.data);
+        if(success){
+          this.push({path:'/index/schoolManage',query:{id}})
+        }
+        this.$message({message,type:success?'success':'warning'});
+      })
+    }
+  }
 }
 
 </script>
@@ -197,6 +234,9 @@ export default {
         .sm_li_span{
           font-size: 16px;
           color:rgba(51,51,51,1);
+        }
+        .sm_tow+.sm_tow{
+          margin-left: 20px;
         }
         .sm_li_span_j{
           margin-left: 20px;

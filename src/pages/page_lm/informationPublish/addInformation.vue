@@ -6,12 +6,12 @@
           <span>资讯分类</span>
         </div>
         <div class="addt_d_select">
-          <el-select v-model="getYear" placeholder="请选择年">
+          <el-select v-model="getYear" placeholder="请选择资讯分类">
             <el-option
               v-for="item in getYearList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item"
+              :label="item"
+              :value="item">
             </el-option>
           </el-select>
         </div>
@@ -76,7 +76,7 @@ export default {
   data () {
     return {
       getYear:'',
-      getYearList:[],
+      getYearList:['学前资讯','小学资讯','中学资讯','艺术培训','学历提升','职业培训','资格证书','其他资讯'],
       tName:'',
       text:'',
 

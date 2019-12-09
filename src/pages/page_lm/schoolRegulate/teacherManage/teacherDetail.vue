@@ -90,8 +90,8 @@
       </li>
     </ul>
     <div class="tm_btn">
-      <el-button v-if='!auditPass' :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button>
-      <el-button v-if='!auditPass' :disabled="isForbiddenBnt" class="tm_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button>
+      <el-button v-if='!auditPass' :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">下架</el-button>
+      <!-- <el-button v-if='!auditPass' :disabled="isForbiddenBnt" class="tm_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button> -->
       <div class="tm_tc fx" v-show="isShowTc" @click="topCloseTc">
         <div class="tm_tc_d">
           <p class="tm_tc_p fx">

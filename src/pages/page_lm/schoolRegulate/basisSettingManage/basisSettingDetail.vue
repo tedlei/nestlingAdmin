@@ -6,11 +6,11 @@
           <span>学校全称</span>
         </div>
         <div class="bsm_li_right">
-          <span class="bsm_li_span">{{settingObj.schoolName}}</span>
+          <span class="bsm_li_span">{{schoolObj.organizationName}}</span>
 
-          <span class="bsm_li_span_j">普通入驻+保证金+学校年费VIP</span>
+          <!-- <span class="bsm_li_span_j">普通入驻+保证金+学校年费VIP</span>
           <span class="bsm_li_span_j">金牌合作</span>
-          <span class="bsm_li_span_j">诚信保证</span>
+          <span class="bsm_li_span_j">诚信保证</span> -->
         </div>
       </li>
       <li class="bsm_li fx">
@@ -18,7 +18,7 @@
           <span>学校地址</span>
         </div>
         <div class="bsm_li_right">
-          <span class="bsm_li_span">{{settingObj.schoolLocalhost}}</span>
+          <span class="bsm_li_span">{{schoolObj.schoolAddress}}</span>
         </div>
       </li>
       <li class="bsm_li fx">
@@ -26,7 +26,7 @@
           <span>学校电话</span>
         </div>
         <div class="bsm_li_right">
-          <span class="bsm_li_span">{{settingObj.schoolFixPhone}}</span>
+          <span class="bsm_li_span">{{schoolObj.schoolPhone}}</span>
         </div>
       </li>
       <li class="bsm_li li_width fx">
@@ -35,10 +35,10 @@
         </div>
         <div class="bsm_li_right">
           <div class="bsm_li_img xxfm">
-            <img :src="settingObj.schoolCover" alt="正在加载……">
+            <img :src="schoolObj.schoolImage" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolCover)<0" @click="topcsPhone(settingObj.schoolCover,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolCover,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolImage" @click="topcsPhone('schoolImage',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolImage',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -50,12 +50,12 @@
         </div>
         <div class="bsm_li_right">
           <div class="bsm_li_img logo">
-            <img :src="settingObj.schoolLogo" alt="正在加载……">
+            <img :src="schoolObj.schoolLogo" alt="正在加载……">
             <template v-if="!auditPass">
               <p class="bsm_li_p" 
-              v-if="auditNO.indexOf(settingObj.schoolLogo)<0" 
-              @click="topcsPhone(settingObj.schoolLogo,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLogo,true)">撤销</p>
+              v-if="!auditNOimg.schoolLogo" 
+              @click="topcsPhone('schoolLogo',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolLogo',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -66,10 +66,10 @@
         </div>
         <div class="bsm_li_right">
           <div class="bsm_li_img gzh">
-            <img :src="settingObj.schoolQRcode" alt="正在加载……">
+            <img :src="schoolObj.schoolPublicCode" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolQRcode)<0" @click="topcsPhone(settingObj.schoolQRcode,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolQRcode,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolPublicCode" @click="topcsPhone('schoolPublicCode',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolPublicCode',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -81,10 +81,10 @@
         </div>
         <div class="bsm_li_right">
           <div class="bsm_li_img wzt">
-            <img :src="settingObj.schoolLocalhostPhone" alt="正在加载……">
+            <img :src="schoolObj.schoolMapImage" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolLocalhostPhone)<0" @click="topcsPhone(settingObj.schoolLocalhostPhone,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolLocalhostPhone,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolMapImage" @click="topcsPhone('schoolMapImage',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolMapImage',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -95,11 +95,11 @@
           <span>广告图1</span>
         </div>
         <div class="bsm_li_right">
-          <div class="bsm_li_img">
-            <img :src="settingObj.schoolAdvertisingPhone1" alt="正在加载……">
+          <div class="bsm_li_img ggHeight">
+            <img :src="schoolObj.schoolAdvertOne" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone1)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone1,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone1,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolAdvertOne" @click="topcsPhone('schoolAdvertOne',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolAdvertOne',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -109,11 +109,11 @@
           <span>广告图2</span>
         </div>
         <div class="bsm_li_right">
-          <div class="bsm_li_img">
-            <img :src="settingObj.schoolAdvertisingPhone2" alt="正在加载……">
+          <div class="bsm_li_img ggHeight">
+            <img :src="schoolObj.schoolAdvertTwo" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone2)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone2,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone2,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolAdvertTwo" @click="topcsPhone('schoolAdvertTwo',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolAdvertTwo',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -123,11 +123,11 @@
           <span>广告图3</span>
         </div>
         <div class="bsm_li_right">
-          <div class="bsm_li_img">
-            <img :src="settingObj.schoolAdvertisingPhone3" alt="正在加载……">
+          <div class="bsm_li_img ggHeight">
+            <img :src="schoolObj.schoolAdvertThree" alt="正在加载……">
             <template v-if="!auditPass">
-              <p class="bsm_li_p" v-if="auditNO.indexOf(settingObj.schoolAdvertisingPhone3)<0" @click="topcsPhone(settingObj.schoolAdvertisingPhone3,false)">不通过</p>
-              <p class="bsm_li_cx fx" v-else @click="topcsPhone(settingObj.schoolAdvertisingPhone3,true)">撤销</p>
+              <p class="bsm_li_p" v-if="!auditNOimg.schoolAdvertThree" @click="topcsPhone('schoolAdvertThree',false)">不通过</p>
+              <p class="bsm_li_cx fx" v-else @click="topcsPhone('schoolAdvertThree',true)">撤销</p>
             </template>
           </div>
         </div>
@@ -168,37 +168,91 @@ export default {
       isShowTc:false,   //是否显示弹窗
       textarea:'',
 
-      settingObj:{   //学校设置详情
-        schoolName:'重庆龙丰教育学校',     //学校名称
-        schoolLocalhost:'重庆市江北区建新南路11号浩博天庭18-2',   //学校地址
-        schoolFixPhone:'023-12345678',   //学校固话
-        schoolTag:'普通入驻+保证金+学校年费VIP,金牌合作,诚信保证',
-        schoolCover:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg', //学校封面
-        schoolLogo:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg',  //学校logo
-        schoolQRcode:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg',  //学校二维码
-        schoolLocalhostPhone:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg',   //学校位置图
-        schoolAdvertisingPhone1:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg', //广告图1
-        schoolAdvertisingPhone2:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg', //广告图2
-        schoolAdvertisingPhone3:'http://pic1.win4000.com/wallpaper/3/589ac4fd2341d.jpg', //广告图3
-      },
+      schoolObj:{},  //学校详情
       
-      auditNO:[],   //不通过图片列表
+      auditNOimg:{},   //不通过图片列表
     };
   },
+
+  created(){
+    let {num} = this.$route.query;
+    this.getSchoolDetail(num);
+  },
   methods: {
+    //获取学校数据
+    getSchoolDetail(num){
+      let url = "/schooluser/getSh.do";
+      this.fetch({url,data:{userid:num},method:'post'},1).then((res)=>{
+        this.schoolObj = res.data;
+      })
+    },
+
+
     //审核
     topAudit(boole){
+      let ani = this.auditNOimg;
+      let schoolObj = this.schoolObj;
+      let message = '';
       if(boole){
-        if(this.auditNO.length>0){
-          this.isForbiddenBnt = true;
-          this.isShowTc = true;
-        }else{
-          this.$message({message:'审核通过',type:'success'});
+        if(ani.schoolImage){
+          schoolObj.schoolImage = '';
+          message += '学校封面图片不规范或不符合，';
         }
+        if(ani.schoolLogo){
+          schoolObj.schoolLogo = '';
+          message += '学校LOGO图片不规范或不符合，';
+        }
+        if(ani.schoolPublicCode){
+          schoolObj.schoolPublicCode = '';
+          message += '二维码图片不规范或不符合，';
+        }
+        if(ani.schoolMapImage){
+          schoolObj.schoolMapImage = '';
+          message += '位置图片不规范或不符合，';
+        }
+        if(ani.schoolAdvertOne){
+          schoolObj.schoolAdvertOne = '';
+          message += '广告图片1不规范或不符合，';
+        }
+        if(ani.schoolAdvertTwo){
+          schoolObj.schoolAdvertTwo = '';
+          message += '广告图片2不规范或不符合，';
+        }
+        if(ani.schoolAdvertThree){
+          schoolObj.schoolAdvertThree = '';
+          message += '广告图片3不规范或不符合，';
+        }
+        this.jcSettingAydit(message,true);
       }else{
         this.isForbiddenBnt = true;
-        this.isShowTc = true;
+        this.isShowTc = true;//不通过
+        // this.jcSettingAydit(this.textarea,false);
       }
+    },
+
+    jcSettingAydit(message,boole){
+      let url = '/school/updateBasicsStatus.do'
+      let data = {schoolUser:{
+        basicsStatus:'1',
+        id:this.schoolObj.id
+      }}
+      // data.schoolUser.courseStatus = '1';
+      if(message){
+        data.schoolUser = this.schoolObj;
+        data.schoolUser.basicsStatus = '1';
+        data.message = message;
+      }
+      if(!boole){
+        delete data.schoolUser;
+        data.schoolUser = {basicsStatus:'2',id:this.schoolObj.id}
+        // data.schoolUser.courseStatus = '2'
+      }
+      // return
+        console.log(data);
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        console.log(res.data);
+
+      })
     },
 
     //关闭弹窗
@@ -216,18 +270,22 @@ export default {
         return
       }
       this.isShowTc = false;
-      this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      // this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      this.jcSettingAydit(textarea,false);
     },
 
     //审核图片
     topcsPhone(imgSrc,boole){
-      if(!boole){
-        this.auditNO.push(imgSrc)
+      let so = this.schoolObj;
+      let ani = this.auditNOimg;
+      let img = so[imgSrc];
+      if(boole){
+        so[imgSrc] = ani[imgSrc];
+        delete ani[imgSrc];
       }else{
-        let num = this.auditNO.indexOf(imgSrc)
-        this.auditNO.splice(num,1)
+        ani[imgSrc] = so[imgSrc]
+        so[imgSrc] = '';
       }
-      console.log(this.auditNO)
     }
   }
 
@@ -279,6 +337,7 @@ export default {
           width:100%;
           max-width: 1200px;
           height:auto;
+          // min-height:400px; 
           background:rgba(217,217,217,1);
           border:1px solid rgba(230,230,230,1);
           border-radius:5px;
@@ -319,6 +378,9 @@ export default {
             left: 0;
             cursor: pointer;
           }
+        }
+        .ggHeight{
+          min-height: 400px;
         }
         .bsm_li_img:hover>.bsm_li_p{
           bottom: 0;

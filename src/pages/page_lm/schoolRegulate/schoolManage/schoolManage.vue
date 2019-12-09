@@ -9,12 +9,13 @@
       </template>
       <span v-if="isShowBtn" class="sm_d1_btn">
         <el-button class="sm_btn" v-if="btnNum===1" type="primary" @click="topBtnNum(2)">取消禁用</el-button>
-        <el-button class="sm_btn" v-if="btnNum===1" type="primary" @click="topBtnNum(3)">删除恢复</el-button>
+        <!-- <el-button class="sm_btn" v-if="btnNum===1" type="primary" @click="topBtnNum(3)">删除恢复</el-button> -->
         <el-button class="sm_btn" v-else type="primary" @click="topBtnNum(1)">返回</el-button>
       </span>
       <el-button v-if="(!isShowBtn)&&topTitleList.length>1" class="sm_btn sm_d1_btn" type="primary" @click="topBack('schoolManage')">返回</el-button>
     </div>
     <router-view :btnNum="btnNum" :isAptitudeAudit="isAptitudeAudit"></router-view>
+    
   </div>
 </template>
 

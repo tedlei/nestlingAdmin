@@ -83,17 +83,17 @@ export default {
       this.schoolList = [];
       if(this.query.place*1 === 0){
         switch(this.query.num*1){
-          case 0 : title = '小学';
+          case 0 : title = '小学辅导';
             break
-          case 1 : title = '中学';
+          case 1 : title = '中学辅导';
             break
-          case 2 : title = '艺术';
+          case 2 : title = '艺术培训';
             break
-          case 3 : title = '学历';
+          case 3 : title = '学历提升';
             break
-          case 4 : title = '职业';
+          case 4 : title = '职业培训';
             break
-          case 5 : title = '其他';
+          case 5 : title = '其他课程';
             break
         }
         data.name = title;
