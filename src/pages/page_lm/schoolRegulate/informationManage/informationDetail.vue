@@ -93,7 +93,7 @@ export default {
     getInfoObj(id){
       let url = '/getMessage/byId.do';
       let data = {id};
-      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+      this.fetch({url,data,method:'post'},6).then(res=>{
         this.infoObj = res.data;
       })
     },
@@ -113,19 +113,19 @@ export default {
     //点击弹窗确认时
     topNotarize(){
       let url = '/getMessage/update.do';
-      let data = {
-        id:this.infoObj.id,
-        schoolId:this.infoObj.schoolId,
-        message:this.textarea
-      };
-      let textarea = this.textarea
-      if(!textarea.replace(/\s*/g,"")){
+      let message = this.textarea
+      if(!message.replace(/\s*/g,"")){
         this.$message({message:'请输入原因！',type:'warning'});
         return
       }
+      let data = {
+        id:this.infoObj.id,
+        schoolId:this.infoObj.schoolId,
+        message
+      };
       // console.log(data);
       // return 
-      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+      this.fetch({url,data,method:'post'},6).then(res=>{
         let {message,success} = res.data;
         if(success){
           this.push({path:'/index/informationManage',query:{id:this.$route.query.id}})

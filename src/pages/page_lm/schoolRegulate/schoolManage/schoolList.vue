@@ -53,7 +53,7 @@
         <tbody>
           <tr v-for="(item,i) of schoolList" :key="i">
             <td>{{item.organizationName}}</td>
-            <td>{{item.schoolStatus*1===3?'审核通过':'未审核'}} {{item.schoolStatus}}</td>
+            <td>{{item.schoolStatus*1===3?'审核通过':'未审核'}}</td>
             <td class="sm_td_ck" @click="topLookOver(item.id)">查看</td>
             <template v-if="!isAptitudeAudit">
               <td v-if="btnNum!==3" class="sm_td_jyAndsc" @click="topForbidden(item.id,btnNum)">{{btnNum===1?'禁用':btnNum===2?'取消禁用':''}}</td>
@@ -97,6 +97,26 @@
         </div>
       </div>
     </div>
+
+    <div class="iam_tc fx" v-show="isShowTc" @click="closeTc">
+        <div class="iam_tc_d">
+          <p class="iam_tc_p fx">
+            <span>不通过原因或理由</span>
+            <i class="el-icon-close" @click.stop="closeTc"></i>
+          </p>
+          <div class="iam_tc_input">
+            <el-input
+              type="textarea"
+              :rows="8"
+              placeholder="请输入内容"
+              v-model="textarea">
+            </el-input>
+          </div>
+          <div class="iam_tc_btn">
+            <el-button type="primary" @click="topNotarize()">确认</el-button>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -123,6 +143,11 @@ export default {
       authCode:'',   //验证码
       residueItem:0,   //剩余时间
       schoolId:'',   //学校id
+
+      textarea:'',//禁用或删除理由
+      isShowTc:false,
+      jySchoolId:'',
+      status:'',
     };
   },
 
@@ -142,6 +167,12 @@ export default {
       if(event.target===event.currentTarget){
         this.schoolId = '';
       }
+    },
+
+    closeTc(){
+      if(event.currentTarget!==event.target)return
+      this.isShowTc = false;
+      this.schoolId = '';
     },
 
     //点击验证码时
@@ -227,42 +258,28 @@ export default {
 
     //禁用或删除
     topForbidden(schoolId,btnNum){
-      let url = '/school/updateStatus.do';
       let data = {schoolId,status:'4'};
       let str1 = '是否禁用该用户？该操作会让学校用户信息无法在客户端显示，请谨慎操作！'
-      let str2 = '已禁用该用户'
       if(btnNum===2){
         str1 = '是否取消对该用户的禁用操作？'
-        str2 = '该用户禁用已取消'
         data.status = '5';
       }
       if(btnNum===3){
         str1 = '是否删除该用户?该操作会让学校用户无法登陆，请谨慎操作！'
-        str2 = '已删除该用户'
-        data.schoolId = this.schoolId;
         data.status = '6';
-        data.phone = this.phone;
-        data.code = this.authCode;
       }
-      // if(btnNum===5){
-      //   str1 = '是否恢复该用户数据？'
-      //   str2 = '该用户已恢复'
-      //   data.status = '7';
-      // }
       MessageBox.confirm(str1, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(data)
-        this.fetch({url,data,method:'post'},6).then(res=>{
-          let {message,success} = res.data
-          if(success){
-            this.topSearch();
-            this.schoolId = '';
-          }
-          this.$message({message,type:success?'success':'warning'});
-        })
+        if(btnNum===1||btnNum===3){
+          this.jySchoolId = schoolId;
+          this.status = data.status ;
+          this.isShowTc = true;
+          return
+        }
+        this.updateData(data);
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -270,6 +287,55 @@ export default {
         });          
       });
     },
+
+    //输入理由后点击确认
+    topNotarize(){
+      let message = this.textarea
+      let status = this.status
+      if(!message.replace(/\s*/g,"")){
+        this.$message({message:'请输入原因！',type:'warning'});
+        return
+      }
+      let data = {schoolId:this.jySchoolId,status,message};
+      if(status==='6'){
+          data.phone = this.phone;
+          data.code = this.authCode;
+      }
+
+      //  data.schoolId = this.schoolId;
+      //   data.status = '6';
+      this.updateData(data);
+    },
+
+    //修改学校状态
+    updateData(data){
+      let url = '/school/updateStatus.do';
+      // MessageBox.confirm(str1, '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      console.log(data);
+      // return
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {message,success} = res.data
+        if(success){
+          this.topSearch();
+          this.schoolId = '';
+        }
+        this.isShowTc = false;
+        this.jySchoolId = '';
+        this.textarea = '';
+        this.$message({message,type:success?'success':'warning'});
+      })
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '用户取消操作'
+      //   });          
+      // });
+    },
+
 
     //获取分页数
     topClick(num){
@@ -464,5 +530,54 @@ export default {
       }
     }
   }
+  .iam_tc{
+      position:absolute;
+      width: 100%;
+      height: 100%;
+      background:rgba(0,0,0,0.1);
+      justify-content: center;
+      align-items: center;
+      top: 0;
+      left: 0;
+      z-index: 10001;
+      .iam_tc_d{
+        padding:10px;
+        width:400px;
+        height:260px;
+        background: white;
+        box-shadow:0px 0px 21px 0px rgba(0, 0, 0, 0.11);
+        border-radius:5px;
+        .iam_tc_p{
+          padding-bottom: 10px;
+          justify-content: space-between;
+          span{
+            font-size: 16px;
+            color:rgba(51,51,51,1);
+          }
+          i{
+            font-size: 24px;
+            cursor: pointer;
+          }
+          i:active{
+            color: rgba(191,191,191,1);
+          }
+        }
+        .iam_tc_input{
+          width: 100%;
+          height: 160px;
+          border: 1px solid rgba(151,151,151,1);
+          border-radius: 5px;
+          overflow: hidden;
+          .el-textarea__inner{
+            border:0;
+            font-size: 16px;
+          }
+        }
+        .iam_tc_btn{
+          padding-top: 5px;
+          text-align: center;
+        }
+      }
+    }
 }
 </style>

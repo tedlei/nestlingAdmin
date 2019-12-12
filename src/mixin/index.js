@@ -73,7 +73,9 @@ export default new class Mixins {
 		return function (params, id, isImage){
 			_this = this;
 			if (typeof id === 'undefined') id = 1;
+
 			axios.defaults.baseURL = typeof id === 'string' ? id : ipList[id-1];
+			// axios.defaults.baseURL =  ipList2[id-1];
 
 			// 是否为图片上传
 			if (isImage) {

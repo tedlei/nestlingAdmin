@@ -47,7 +47,7 @@
       </li>
       <li class="sm_li fx">
         <div class="sm_li_left">
-          <span>授课地区</span>
+          <span>详细地址</span>
         </div>
         <div class="sm_li_right">
           <span class="sm_li_span">{{schoolObj.schoolAddress}}</span>
@@ -135,7 +135,7 @@ export default {
     //获取学校数据
     getSchoolDetail(num){
       let url = "/schooluser/getSh.do";
-      this.fetch({url,data:{userid:num},method:'post'},'http://192.168.3.63:9101').then((res)=>{
+      this.fetch({url,data:{userid:num},method:'post'},1).then((res)=>{
         this.schoolObj = res.data;
       })
     },
@@ -147,10 +147,10 @@ export default {
       this.topTitleList = [];
       if(id==='2-0'||id==='7-1'){
         this.isShowBtn = false;
-        this.$message({message:'增删管理查看'})
+        // this.$message({message:'增删管理查看'})
       }else{
         this.isShowBtn = true;
-        this.$message({message:'资质审核查看'})
+        // this.$message({message:'资质审核查看'})
       }
     },
     //审核
@@ -193,12 +193,10 @@ export default {
         data.status='2';
         data.message = message;
       }
-      console.log(data);
       this.fetch({url,data,method:'post'},6).then(res=>{
         let {message,success} = res.data;
         let {id} = this.$route.query;
         this.isForbiddenBnt = false;
-        console.log(res.data);
         if(success){
           this.push({path:'/index/schoolManage',query:{id}})
         }

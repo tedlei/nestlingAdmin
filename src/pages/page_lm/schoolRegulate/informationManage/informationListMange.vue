@@ -102,7 +102,7 @@ export default {
       if(this.auditPass){
         data.status = '2'
       }
-      this.fetch({url,data,method:'post'},'http://192.168.3.63:9106').then(res=>{
+      this.fetch({url,data,method:'post'},6).then(res=>{
         this.infoemList = res.data.rows;
         this.allDataNum = res.data.total;
       })

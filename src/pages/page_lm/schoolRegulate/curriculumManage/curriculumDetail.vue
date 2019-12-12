@@ -94,8 +94,8 @@
       </li>
     </ul>
     <div class="cum_btn">
-      <el-button v-if="!auditPass" :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button>
-      <el-button v-if="!auditPass" :disabled="isForbiddenBnt" class="cum_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button>
+      <el-button v-if="!auditPass" :disabled="isForbiddenBnt" type="primary" @click="topAudit(false)">下架</el-button>
+      <!-- <el-button v-if="!auditPass" :disabled="isForbiddenBnt" class="cum_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button> -->
       <div class="cum_tc fx" v-show="isShowTc" @click="topCloseTc">
         <div class="cum_tc_d">
           <p class="cum_tc_p fx">
@@ -142,7 +142,6 @@ export default {
       let url = '/curri/findById.do';
       let data = {id,sourceType:'2'};
       this.fetch({url,data,method:'get'},1).then(res=>{
-        console.log(res.data[0])
         this.currObj = res.data[0]
       })
     },
@@ -150,11 +149,12 @@ export default {
     //审核
     topAudit(boole){
       this.isForbiddenBnt = true;
-      if(boole){
-        this.$message({message:'审核通过',type:'success'});
-      }else{
-        this.isShowTc = true;
-      }
+      this.isShowTc = true;
+      // if(boole){
+      //   this.$message({message:'审核通过',type:'success'});
+      // }else{
+      //   this.isShowTc = true;
+      // }
     },
 
     //关闭弹窗
@@ -166,13 +166,25 @@ export default {
 
     //点击弹窗确认时
     topNotarize(){
-      let textarea = this.textarea
-      if(!textarea.replace(/\s*/g,"")){
+      let message = this.textarea
+      if(!message.replace(/\s*/g,"")){
         this.$message({message:'请输入原因！',type:'warning'});
         return
       }
-      this.isShowTc = false;
-      this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      let url = '/course/updateStatus.do';
+      let data = {
+        courseId:this.$route.query.num,
+        status:'1',
+        message
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {message,success} = res.data;
+        if(success){
+          this.push({path:'/index/curriculumManage',query:{id:this.$route.query.id}});
+        }
+        this.isShowTc = false;
+        this.$message({message,type:success?'success':'warning'});
+      })
     },
   }
 
