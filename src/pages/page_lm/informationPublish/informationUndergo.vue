@@ -18,12 +18,20 @@ export default {
     return {
       editorObj:null,  //富文本对象
       schoolIntroStr: '', // 编辑内容
+      schoolInfoObj:{},
     };
+  },
+
+  created() {
+    let schoolInfoObj = this.getItem('schoolInfoObj');
+    if(schoolInfoObj) {
+      this.schoolInfoObj = schoolInfoObj;
+      this.schoolIntroStr = schoolInfoObj.schoolContent;
+    }
   },
 
   mounted(){
     this.createEditorObj();
-    this.getEditorHtml();
   },
 
   methods: {
@@ -33,18 +41,35 @@ export default {
       this.editor("editorObj", teac_d_header, teac_d_body, 'schoolIntroStr');
     },
 
-    //获取后台富文本类容
-    getEditorHtml(){
-      this.schoolIntroStr = this.getItem('infoText');
+    //点击保存时
+    topCommit(){
+      // let text = this.editorObj.txt.text().replace(/\s*/g,"");
+      // if(!text){
+      //   this.$message({message:'请输入内容在保存',type:'warning'});
+      //   return
+      // }
+      let htm = this.editorObj.txt.html();
+      if (!this.editorObj.txt.text()) { // 无内容时 值为空字符串
+          let message = '学校简介内容不能为空';
+          if (htm.match(/(<img src)([^>])+>/g)) {
+              message = '学校简介内容不能只存在图片'
+          }
+          this.$message({message, type: 'warning'});
+          return ;
+      }
+      this.saveText();
+      this.$router.go(-1)
     },
 
     //保存富文本类容
-    topCommit(){
-      this.setItem('infoText',this.editorObj.txt.html());
-    }
+    saveText(){
+      let schoolInfoObj = this.schoolInfoObj;
+      schoolInfoObj.schoolContent = this.editorObj.txt.html();
+      this.setItem('schoolInfoObj',schoolInfoObj);
+    },
   },
   beforeDestroy(){
-    this.topCommit();
+    this.saveText();
   },
   
 }

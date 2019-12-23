@@ -127,9 +127,9 @@ export default {
         categoryId:''+(query.place+1), //广告类目id
         title:query.title,      //标题
         url:item.id,        //连接
-        sortOrder:''+(query.num+1)   //位置
+        sortOrder:''+(query.num+1),   //位置
+        phone:this.getItem('phone')
       }]
-      console.log(data)
       this.fetch({url,data,method:'post'},6).then(res=>{
         let {message,success} = res.data;
         if(success){

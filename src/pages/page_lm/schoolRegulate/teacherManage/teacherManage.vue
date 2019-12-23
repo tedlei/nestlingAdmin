@@ -8,7 +8,7 @@
         <i :key="i+'1'" v-if="item.src" class="el-icon-arrow-right"></i>
       </template>
       <span class="tm_d1_btn" v-show="isShowBtn">
-        <el-button class="tm_btn" type="primary" @click="topAudit">{{auditPass?'已上架列表':'已下架列表'}}</el-button>
+        <!-- <el-button class="tm_btn" type="primary" @click="topAudit">{{auditPass?'已上架列表':'已下架列表'}}</el-button> -->
       </span>
       <el-button v-if="topTitleList.length>1" class="tm_btn tm_d1_btn" type="primary" @click="topBack('curriculumManage')">返回</el-button>
     </div>

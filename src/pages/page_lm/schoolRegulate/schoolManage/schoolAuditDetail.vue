@@ -56,7 +56,17 @@
 
       <li class="sm_li li_width fx">
         <div class="sm_li_left">
-          <span>学校资质</span>
+          <span>学校LOGO</span>
+        </div>
+        <div class="sm_li_right">
+          <div class="sm_li_img smLogo">
+            <img :src="schoolObj.schoolLogo" alt="正在加载……">
+          </div>
+        </div>
+      </li>
+      <li class="sm_li li_width fx">
+        <div class="sm_li_left">
+          <span>营业执照</span>
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
@@ -66,17 +76,18 @@
       </li>
       <li class="sm_li li_width fx">
         <div class="sm_li_left">
-          <span>学校LOGO</span>
+          <span>办学许可</span>
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
-            <img :src="schoolObj.schoolLogo" alt="正在加载……">
+            <img :src="schoolObj.schoolPermission" alt="正在加载……">
           </div>
         </div>
       </li>
+      
       <li class="sm_li li_width fx">
         <div class="sm_li_left">
-          <span>品牌资质</span>
+          <span>授权文件</span>
         </div>
         <div class="sm_li_right">
           <div class="sm_li_img">
@@ -255,9 +266,13 @@ export default {
           border:1px solid rgba(230,230,230,1);
           border-radius:5px;
           img{
-            height: 100%;
+            width: 100%;
             height: 100%;
           }
+        }
+        .smLogo{
+          width: 300px;
+          height: 100px;
         }
       }
     }

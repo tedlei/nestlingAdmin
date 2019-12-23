@@ -35,13 +35,21 @@ export default new class Mixins {
 			'http://192.168.3.78:9105/',
 			'http://192.168.3.78:9106/',
 		];
-            let ipList2 = [
+		let ipList2 = [
 			'http://192.168.3.63:9101/',
 			'http://192.168.3.63:9102',
 			'http://192.168.3.63:9103/',
 			'http://192.168.3.63:9104/',
 			'http://192.168.3.63:9105/',
 			'http://192.168.3.63:9106/',
+		];
+		let ipList3 = [
+			'http://192.168.3.66:9101/',
+			'http://192.168.3.66:9102',
+			'http://192.168.3.66:9103/',
+			'http://192.168.3.66:9104/',
+			'http://192.168.3.66:9105/',
+			'http://192.168.3.66:9106/',
 		];
     	// 网络请求
 		// axios.defaults.withCredentials = false;  // 是否允许携带cookie-
@@ -64,7 +72,7 @@ export default new class Mixins {
 			if(status===201){
 				_this.verifyLogin({
 					message: '未登陆，请先登陆！',
-					url: 'http://127.0.0.1:8080/#/loginAndRegister'
+					url: '/login'
 				}, false)
 			}
 		    return result;
@@ -73,7 +81,6 @@ export default new class Mixins {
 		return function (params, id, isImage){
 			_this = this;
 			if (typeof id === 'undefined') id = 1;
-
 			axios.defaults.baseURL = typeof id === 'string' ? id : ipList[id-1];
 			// axios.defaults.baseURL =  ipList2[id-1];
 
@@ -87,11 +94,10 @@ export default new class Mixins {
 			let url = params.url;
 			if (/^\//.test(url)) params.url = url.slice(1);
 
-			let userInfo = _this.getItem('userInfo');    //所有接口都需要传的值
+			let phone = _this.getItem('phone');    //所有接口都需要传的值
 			let data = params.data;
-			if(userInfo){
-				data.phone = userInfo.user.phone;
-				data.schoolId = userInfo.schoolUser.id;
+			if(phone){
+				data.phone = phone;
 			}
 			if (params.method === 'get') {
 				if (data) {
@@ -160,7 +166,7 @@ export default new class Mixins {
 				quit() {
 					// 清除本地所有数据
 					window.localStorage.clear();
-					this.push('/loginAndRegister');
+					this.push('/login');
 				},
 				getTimer() {
 					function double(val) {
@@ -221,6 +227,34 @@ export default new class Mixins {
 				 */
 				childRouteJump(url){
 					this.push(this.$route.fullPath.replace('?', '/' + url +'?'))
+				},
+				/**
+				 * @param param
+				 *            message    提示信息
+				 *            url        跳转的url
+				 * @param result    Boolean or Function: 函数返回值为Boolean（是否登陆的结果）
+				 */
+				verifyLogin(param, result) {
+					// 未登陆跳转到登录页
+					result = typeof result === 'function' ? result() : result;
+
+					if (!result) {
+						this.$msgbox({
+							message: param.message,
+							beforeClose: (action, instance, done) => {
+								instance.confirmButtonLoading = true;
+								instance.confirmButtonText = '跳转中...';
+								setTimeout(() => {
+									// 跳转到登录页
+									this.push(param.url);
+									done();
+									setTimeout(() => {
+										instance.confirmButtonLoading = false;
+									}, 300);
+								}, 1000);
+							}
+						});
+					}
 				}
 			}
 		})

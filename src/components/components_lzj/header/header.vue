@@ -25,7 +25,9 @@
         },
         methods:{
             topLogin(){
-                this.push('/login');
+                let url = '/logout.do'
+                this.fetch({url,data:{},method:'get'},6)
+                this.quit();
             }
         }
     }

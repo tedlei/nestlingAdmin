@@ -11,48 +11,117 @@
           <th>序号</th>
           <th>标题</th>
           <th>作者</th>
+          <!-- <th>状态</th> -->
           <th>发布时间</th>
           <th>资讯操作</th>
         </tr> 
       </thead>
-      <tbody>
+      <tbody v-if="teacherList.length>0">
         <tr v-for="(item,i) of teacherList" :key="i">
           <td>{{i+1}}</td>
-          <td>{{item.topic}}</td>
-          <td>{{item.writer}}</td>
-          <td>{{item.fbDate}}</td>
+          <td>{{item.schoolTopic}}</td>
+          <td>{{item.schoolAuthor}}</td>
+          <!-- <td>{{item.schoolStatus*1===1?'已上架':'已下架'}}</td> -->
+          <td>{{item.schoolTime}}</td>
           <td>
-            <span @click="topGoToAdd(1)">编辑</span>
-            <span @click="topDelete(i)">删除</span>
+            <span @click="topGoToAdd(item.id)">编辑</span>
+            <span @click="topDelete(item.id)">删除</span>
           </td>
         </tr>
       </tbody>
+      <tbody v-else>
+        <tr><td style="height:100px;" colspan="7">没有数据</td></tr>
+      </tbody>
     </table>
+
+    <pagination 
+    :currentPage="pageNo" 
+    :sum="total" 
+    :onePageNumber="pageSize" 
+    :currentChange="updetePageNum"></pagination>
+    <!-- <div class="infollfy">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        prev-text='上一页'
+        next-text='下一页'
+        @current-change = "updetePageNum"
+        :current-page="pageNo"
+        :page-size="pageSize"
+        :total="total">
+      </el-pagination>
+    </div> -->
   </div>
 </template>
 
 <script>
+import pagination from '../../../components/common/pagination'
 export default {
+  components:{pagination},
   data () {
     return {
-      teacherList:[
-        {topic:'这是标题',writer:'这是作者',fbDate:'2019-10-10 12:12:12'}
-      ]
+      teacherList:[],
+      pageNo:1,  //当前页
+      pageSize:10,   //每页条数
+      total:0,    //总条数
     };
   },
 
+  created(){
+    this.seachInfoList()
+  },
 
   methods: {
-    //点击修改时
+    //获取资讯列表
+    seachInfoList(){
+      let url = '/getMessage/selectM.do';
+      // getMessage/selectM
+      // let url = 'getMessage/selectMessage';
+      let data = {
+        pageNum:''+this.pageNo,
+        pageSize:''+this.pageSize,
+        schoolId:'root',
+        // phone:'root'
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        // console.log(res.data);
+        if(res.data){
+          this.total = res.data.total;
+          this.teacherList = res.data.rows;
+        }
+      })
+    },
+
+    //点击删除时
     topDelete(num){
-      this.teacherList.splice(num,1);
+      // let url = '/attention/remveMessage.do'
+      let url = '/getMessage/remveMessage.do'
+      let data ={
+        id:''+num,
+        schoolId:'root'
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {message,success} = res.data;
+        if(success){
+          this.seachInfoList();
+        }
+        this.$message({message,type:success?'success':'warning'});
+      })
     },
 
     //点击跳转
     topGoToAdd(num){
       let src = 'informationPublish/addInformation?id='+this.$route.query.id
-      if(num) src += '&num='+num
+      if(num) {
+        src += '&num='+num
+      }
+      this.setItem("schoolInfoObj",'');
       this.push(src)
+    },
+
+    updetePageNum(num){
+      this.pageNo = num*1;
+      this.seachInfoList()
     }
   }
 
@@ -107,6 +176,10 @@ export default {
         }
       }
     }
+  }
+  .infollfy{
+    padding: 20px 0;
+    text-align: center;
   }
 }
 </style>

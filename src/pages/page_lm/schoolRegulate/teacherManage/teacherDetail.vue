@@ -1,7 +1,7 @@
 <template>
   <div class="tm-app">
     <ul class="tm_ul">
-      <li class="tm_li fx">
+      <!-- <li class="tm_li fx">
         <div class="tm_li_left">
           <span>学校全称</span>
         </div>
@@ -12,13 +12,13 @@
           <span class="tm_li_span_j">金牌合作</span>
           <span class="tm_li_span_j">诚信保证</span>
         </div>
-      </li>
+      </li> -->
       <li class="tm_li fx">
         <div class="tm_li_left">
           <span>教师姓名</span>
         </div>
         <div class="tm_li_right">
-          <span class="tm_li_span">高老师</span>
+          <span class="tm_li_span">{{teacher.teacherName}}</span>
         </div>
       </li>
       <li class="tm_li li_width fx">
@@ -27,7 +27,7 @@
         </div>
         <div class="tm_li_right">
           <div class="tm_li_img">
-            <img src="" alt="正在加载……">
+            <img :src="teacher.teacherImage" alt="正在加载……">
           </div>
         </div>
       </li>
@@ -36,7 +36,7 @@
           <span>教龄</span>
         </div>
         <div class="tm_li_right">
-          <span class="tm_li_span">3年</span>
+          <span class="tm_li_span">{{teacher.teacherAge}}</span>
         </div>
       </li>
       <li class="tm_li fx">
@@ -44,7 +44,7 @@
           <span>毕业院校</span>
         </div>
         <div class="tm_li_right">
-          <span class="tm_li_span">重庆工商大学</span>
+          <span class="tm_li_span">{{teacher.teacherSchool}}</span>
         </div>
       </li>
       <li class="tm_li fx">
@@ -52,7 +52,7 @@
           <span>擅长教学</span>
         </div>
         <div class="tm_li_right">
-          <span class="tm_li_span">PLC编程</span>
+          <span class="tm_li_span">{{teacher.teacherAdept}}</span>
         </div>
       </li>
      
@@ -62,13 +62,7 @@
         </div>
         <div class="tm_li_right minHeight">
           <div class="tm_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+            {{teacher.teacherIntro}}
           </div>
         </div>
       </li>
@@ -77,21 +71,12 @@
           <span>教师经验</span>
         </div>
         <div class="tm_li_right minHeight">
-          <div class="tm_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-          </div>
+          <div class="tm_li_text" v-html="teacher.teacherMessage"></div>
         </div>
       </li>
     </ul>
     <div class="tm_btn">
-      <el-button v-if='!auditPass' :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">下架</el-button>
-      <!-- <el-button v-if='!auditPass' :disabled="isForbiddenBnt" class="tm_btn_left" type="primary" @click="topAudit(false)">审核不通过</el-button> -->
+      <el-button v-if='!auditPass' :disabled="isForbiddenBnt" type="primary" @click="topAudit(false)">下架</el-button>
       <div class="tm_tc fx" v-show="isShowTc" @click="topCloseTc">
         <div class="tm_tc_d">
           <p class="tm_tc_p fx">
@@ -123,17 +108,29 @@ export default {
       isForbiddenBnt:false,   //是否禁用按钮
       isShowTc:false,   //是否显示弹窗
       textarea:'',
+      teacher:{},
     };
   },
+  created() {
+    let num = this.$route.query.num;
+    this.getTeacher(num);
+  },
   methods: {
+    //获取教师数据
+    getTeacher(id){
+      let url = '/school/teacherInfo.do';
+      let data = {id};
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        this.teacher = res.data;
+      })
+    },
+
+    
+
     //审核
     topAudit(boole){
       this.isForbiddenBnt = true;
-      if(boole){
-        this.$message({message:'审核通过',type:'success'});
-      }else{
-        this.isShowTc = true;
-      }
+      this.isShowTc = true;
     },
 
     //关闭弹窗
@@ -150,8 +147,18 @@ export default {
         this.$message({message:'请输入原因！',type:'warning'});
         return
       }
-      this.isShowTc = false;
-      this.$message({message:'审核不通过原因:'+textarea,type:'success'});
+      let url = '/school/teacherDown.do';
+      let data = {
+        id:this.teacher.id,
+        schoolId:this.teacher.teacherSchoolId,
+        textarea
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        if(res.data){
+          this.$message({message:'下架成功',type:'success'});
+          this.$router.go(-1);
+        }
+      })
     },
   }
 

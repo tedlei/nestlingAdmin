@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th>手机号码</th>
-            <th>昵称</th>
+            <th>标题</th>
             <th>状态</th>
             <th>内容详情</th>
             <th>反馈时间</th>
@@ -13,11 +13,11 @@
         </thead>
         <tbody>
           <tr v-for="(item,i) of schoolList" :key="i">
-            <td>{{item.phone}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'未查看':'已查看'}}</td>
+            <td>{{item.problemPhone}}</td>
+            <td>{{item.problemTitle}}</td>
+            <td>{{item.problemStatus*1===1?'未查看':'已查看'}}</td>
             <td class="cb_td_ck" @click="topLookOver(item.id)">查看</td>
-            <td>{{item.date}}</td>
+            <td>{{item.problemTime}}</td>
           </tr>
         </tbody>
       </table>
@@ -28,7 +28,9 @@
         layout="prev, pager, next"
         prev-text="上一页"
         next-text="下一页"
-        :total="1000">
+        :page-size='pageSize'
+        :current-page='pageNum'
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -38,48 +40,49 @@
 export default {
   data () {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',
-
       schoolList:[
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-        {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
-      ]
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:1,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+        // {id:100001,phone:'15178888998',name:'隔壁老王他妈',shneghe:2,date:'2019-9-2 10:14:14'},
+      ],
+      pageNum:1,
+      pageSize:20,
+      total:0,
     };
   },
-
+  created() {
+    this.getCoupleList()
+  },
   methods: {
     //查看
     topLookOver(id){
       this.push({path:'coupleBack/coupleBackDetail',query:{num:id,id:this.$route.query.id}})
     },
+
+    //获取问题反馈列表
+    getCoupleList(){
+      let url = 'problem/getProblemList.do'
+      let data={
+        pageNum:''+this.pageNum,
+        pageSize:''+this.pageSize
+      }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        this.schoolList = res.data.rows;
+        this.total = res.data.total;
+        console.log(this.schoolList)
+      })
+    }
   }
 
 }

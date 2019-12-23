@@ -63,6 +63,7 @@ export default {
             {url:'',title:'热门课程广告位4',organizationName:'',courseName:''},
             {url:'',title:'热门课程广告位5',organizationName:'',courseName:''},
             {url:'',title:'热门课程广告位6',organizationName:'',courseName:''},
+            {url:'',title:'热门课程广告位7',organizationName:'',courseName:''},
           ]
         },
       ],

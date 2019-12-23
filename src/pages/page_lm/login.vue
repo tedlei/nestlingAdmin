@@ -1,5 +1,5 @@
 <template>
-  <div class="login-app fx">
+  <div class="login-app fx" ref="loginApp">
     <div class="login_logo">
       <img style="width:100%;height:100%;" src="../../../static/images/clLOGO.png" alt="">
     </div>
@@ -10,14 +10,19 @@
       <div class="login_d_input">
         <p class="login_d_p">雏鸟教育后台管理</p>
         <div class="login_in fx">
-          <p>管理员</p>
-          <input type="text" placeholder="请输入帐户名">
+          <p>手机号</p>
+          <input type="number" autofocus v-model="phone" placeholder="请输入手机号">
         </div>
         <div class="login_in fx top30">
-          <p>密码</p>
-          <input type="text" placeholder="请输入帐密码">
+          <p>验证码</p>
+          <input type="number" class="login_input" v-model="yzm" placeholder="请输入验证码">
+          <button 
+          class="login_yzm" 
+          :disabled="residueItem>0" 
+          :class="residueItem>0?'yzmdis':''"
+          @click="topGetYzm">{{residueItem>0?residueItem+"秒后获取":'获取验证码'}}</button>
         </div>
-        <button class="login_btn" @click="topLogin">登陆</button>
+        <button class="login_btn" @click="topLogin">登录</button>
       </div>
     </div>
   </div>
@@ -27,13 +32,73 @@
 export default {
   data () {
     return {
+      phone:'',
+      yzm:'',
 
+      residueItem:0,
     };
   },
-
+  mounted() {
+    let loginApp = this.$refs.loginApp;
+    let then = this;
+    loginApp.onkeydown=function(event){
+      var e = event || window.event || arguments.callee.caller.arguments[0];       
+      if(e && e.keyCode==13){
+        then.topLogin();
+      }
+    }; 
+  },
   methods: {
+    //点击验证码时
+    topGetYzm(){
+      if(!/^1[23456789]\d{9}$/.test(this.phone)){
+        this.$message({message:'电话号码格式错误或为空！',type:'warning'});
+        return
+      }
+      if(this.residueItem>0)return;
+      this.getYzm();
+      let num = 60;
+      let seti = setInterval(() => {
+        this.residueItem = num;
+        if(num<=0){
+          clearInterval(seti);
+        }
+        num--;
+      }, 1000);
+    },
+
+    //获取验证码
+    getYzm(){
+      let url = '/message/phone.do';
+      this.fetch({url,data:{phone:this.phone},method:'get'},6).then(res=>{
+        this.$message({message:res.data.message,type:'success'});
+      }).catch(err=>{
+        this.$message({message:'获取验证码失败，请点击从新获取！',type:'warning'});
+      })
+    },
+
+    //登陆
     topLogin(){
-      this.push('/index')
+      let url = '/login.do'
+      let yzm = this.yzm;
+      let data = {
+        phone:this.phone,
+        code:yzm
+      }
+      if(yzm.length<6){
+        this.$message({message:'验证码为空或格式错误！',type:'warning'});
+        return
+      }
+      this.fetch({url,data,method:'get'},6).then(res=>{
+        let {message,success} = res.data;
+        if(success){
+          this.setItem('phone',this.phone);
+          setTimeout(() => {
+            this.push('/index')
+          }, 1000);
+        }
+        this.$message({message:success?'登陆成功':message,type:success?'success':'warning'});
+      })
     }
   }
 
@@ -101,24 +166,53 @@ export default {
           border:1px solid rgba(230,230,230,1);
           border-radius:5px;
         }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .login_input{
+          width: 200px;
+        }
+        .login_yzm{
+          margin-left: 10px;
+          width: 166px;
+          height: 50px;
+          border-radius: 5px;
+          background-color: #fd8109;
+          font-size: 16px;
+          color: white;
+          cursor: pointer;
+        }
+        .login_yzm:active{
+          background-color: #ec7008;
+        }
+        .yzmdis{
+          cursor: no-drop;
+          background-color: #ccc;
+        }
       }
       .top30{
         margin-top: 30px;
       }
       .login_btn{
-        margin: 50px auto;
+        margin: 50px 138px;
         margin-bottom: 0;
         display: block;
         width:376px;
         height:50px;
-        background:rgba(42,176,234,1);
+        background:#fd8109;
         border-radius:5px;
         font-size: 20px;
         color: white;
         cursor: pointer;
       }
       .login_btn:active{
-        background:rgba(62,196,254,1);
+        background:#ec7008;
       }
     }
   }

@@ -6,23 +6,23 @@
           <span>用户电话</span>
         </div>
         <div class="cb_li_right">
-          <span class="cb_li_span">15178889998</span>
+          <span class="cb_li_span">{{couple.problemPhone}}</span>
         </div>
       </li>
-      <li class="cb_li fx">
+      <!-- <li class="cb_li fx">
         <div class="cb_li_left">
           <span>用户名</span>
         </div>
         <div class="cb_li_right">
           <span class="cb_li_span">隔壁老王他妈</span>
         </div>
-      </li>
+      </li> -->
       <li class="cb_li fx">
         <div class="cb_li_left">
-          <span>主题反馈</span>
+          <span>反馈标题</span>
         </div>
         <div class="cb_li_right">
-          <span class="cb_li_span">没有人回复</span>
+          <span class="cb_li_span">{{couple.problemTitle}}</span>
         </div>
       </li>
       <li class="cb_li li_width fx">
@@ -31,20 +31,14 @@
         </div>
         <div class="cb_li_right minHeight">
           <div class="cb_li_text">
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+            {{couple.problemContent}}
           </div>
         </div>
       </li>
     </ul>
     <div class="cb_btn">
-      <el-button type="primary" @click="topAudit(-1)">上一条</el-button>
-      <el-button class="cb_btn_left" type="primary" @click="topAudit(1)">下一条</el-button>
+      <el-button type="primary" :disabled="!up" @click="topAudit(up)">{{up?'上一条':'没有上一条'}}</el-button>
+      <el-button class="cb_btn_left" :disabled="!dl" type="primary" @click="topAudit(dl)">{{dl?'下一条':'没有下一条'}}</el-button>
     </div>
   </div>
 </template>
@@ -53,12 +47,33 @@
 export default {
   data () {
     return {
+      couple:{},
+      up:'',
+      dl:'',
     };
   },
+  created() {
+    let num = this.$route.query.num;
+    if(num){
+      this.getCouple(num);
+    }
+  },
   methods: {
-    //审核
     topAudit(num){
-      this.$message({message:num===-1?'上一条':'下一条',type:'success'});
+     if(num){
+       this.getCouple(num);
+     }
+    },
+
+    getCouple(num){
+      let url = 'problem/selectProblemById.do'
+      let data = {id:''+num}
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {object,up,dl} = res.data;
+        this.couple = res.data.object;
+        this.up = up?up.id:'';
+        this.dl = dl?dl.id:'';
+      })
     },
 
    

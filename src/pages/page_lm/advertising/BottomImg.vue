@@ -58,12 +58,16 @@ export default {
       imgUploadUrl:'http://192.168.3.78:9101/upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
-        {pic:'',url:'',title:'底部广告1',sortOrder:"1",categoryId:'5'},
+        {pic:'',url:'',title:'底部广告1',sortOrder:"1",categoryId:'5',phone:''},
       ],
     };
   },
 
   created(){
+    let phone = this.getItem('phone');
+    if(phone){
+      this.uploadList[0].phone = phone;
+    }
     this.getThemeAdvList();
   },
 

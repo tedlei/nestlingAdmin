@@ -51,19 +51,23 @@ Vue.use(Upload);
 export default {
   data () {
     return {
-      topTitleList:[{title:'登陆背静广告位'}],    //顶部抬头显示
+      topTitleList:[{title:'登陆背景广告位'}],    //顶部抬头显示
       qrCodeImgName:'',
       qrCodeImgUrl:'',
 
-      imgUploadUrl:'http://192.168.3.78:9102/upload.do',   //图片上传路劲
+      imgUploadUrl:'http://192.168.3.63:9102/upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
-        {pic:'',title:'登陆背静广告位',sortOrder:"1",categoryId:'6'},
+        {pic:'',title:'登陆背景广告位',sortOrder:"1",categoryId:'6',phone:''},
       ],
     };
   },
 
   created(){
+    let phone = this.getItem('phone');
+    if(phone){
+      this.uploadList[0].phone = phone;
+    }
     this.getThemeAdvList();
   },
 

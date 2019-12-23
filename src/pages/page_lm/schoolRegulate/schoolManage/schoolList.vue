@@ -41,6 +41,7 @@
         <thead>
           <tr>
             <th>学校名称</th>
+            <!-- <th>学校权限</th> -->
             <th>审核状态</th>
             <th>内容详情</th>
             <template v-if="!isAptitudeAudit">
@@ -53,12 +54,12 @@
         <tbody>
           <tr v-for="(item,i) of schoolList" :key="i">
             <td>{{item.organizationName}}</td>
+            <!-- <th>{{jurisdiction(item)}}</th> -->
             <td>{{item.schoolStatus*1===3?'审核通过':'未审核'}}</td>
             <td class="sm_td_ck" @click="topLookOver(item.id)">查看</td>
             <template v-if="!isAptitudeAudit">
               <td v-if="btnNum!==3" class="sm_td_jyAndsc" @click="topForbidden(item.id,btnNum)">{{btnNum===1?'禁用':btnNum===2?'取消禁用':''}}</td>
               <td v-if="btnNum!==2" class="sm_td_jyAndsc" @click='topDelete(item.id)'>{{btnNum===1?'删除':btnNum===3?'删除恢复':''}}</td>
-              <!-- @click="topForbidden(item.id,btnNum+2)" -->
             </template>
             <td v-else>{{item.createTime}}</td>
           </tr>
@@ -101,7 +102,7 @@
     <div class="iam_tc fx" v-show="isShowTc" @click="closeTc">
         <div class="iam_tc_d">
           <p class="iam_tc_p fx">
-            <span>不通过原因或理由</span>
+            <span>禁用或删除理由</span>
             <i class="el-icon-close" @click.stop="closeTc"></i>
           </p>
           <div class="iam_tc_input">
@@ -169,6 +170,7 @@ export default {
       }
     },
 
+
     closeTc(){
       if(event.currentTarget!==event.target)return
       this.isShowTc = false;
@@ -177,6 +179,7 @@ export default {
 
     //点击验证码时
     topGetYzm(){
+      console.log(this.phone)
       if(!/^1[23456789]\d{9}$/.test(this.phone)){
         this.$message({message:'电话号码格式错误或为空！',type:'warning'});
         return
@@ -195,8 +198,9 @@ export default {
 
     //获取验证码
     getYzm(){
-      let url = '/message/phone.do?phone='+this.phone;
-      this.fetch({url,method:'get'},2).then(res=>{
+      let url = '/message/phone.do';
+      let data = {phone:this.phone}
+      this.fetch({url,data,method:'get'},2).then(res=>{
         this.$message({message:res.data.message,type:'success'});
       }).catch(err=>{
         this.$message({message:'获取验证码失败，请点击从新获取！',type:'warning'});
@@ -310,13 +314,6 @@ export default {
     //修改学校状态
     updateData(data){
       let url = '/school/updateStatus.do';
-      // MessageBox.confirm(str1, '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      console.log(data);
-      // return
       this.fetch({url,data,method:'post'},6).then(res=>{
         let {message,success} = res.data
         if(success){
@@ -328,19 +325,19 @@ export default {
         this.textarea = '';
         this.$message({message,type:success?'success':'warning'});
       })
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '用户取消操作'
-      //   });          
-      // });
     },
 
 
     //获取分页数
     topClick(num){
       this.atPresentNum = num;
-    }
+    },
+
+    //显示权限
+    // jurisdiction(item){
+    //   console.log(item);
+    //   return "VIP"
+    // }
   },
   watch:{
     'isAptitudeAudit':function(val){
@@ -366,6 +363,9 @@ export default {
     },
     "btnNum":function(){
       this.topSearch();
+    },
+    'phone':(val)=>{
+      console.log(val);
     }
   }
 

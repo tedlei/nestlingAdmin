@@ -6,7 +6,7 @@
           <span>资讯分类</span>
         </div>
         <div class="addt_d_select">
-          <el-select v-model="getYear" placeholder="请选择资讯分类">
+          <el-select v-model="schoolInfoObj.schoolMessage" placeholder="请选择资讯分类">
             <el-option
               v-for="item in getYearList"
               :key="item"
@@ -22,7 +22,7 @@
         </div>
         <div class="addt_d_select">
           <el-switch
-            v-model="value1">
+            v-model="schoolInfoObj.isok">
           </el-switch>
         </div>
       </li>
@@ -31,19 +31,42 @@
           <span>标题</span>
         </div>
         <div class="addt_d_input">
-          <input type="text" v-model="tName" placeholder="请输入教师姓名">
-        </div>
-      </li><li class="addt_l1 fx">
-        <div class="addt_d_span">
-          <span>作者</span>
-        </div>
-        <div class="addt_d_input">
-          <input type="text" v-model="tName" placeholder="请输入教师姓名">
+          <input type="text" v-model="schoolInfoObj.schoolTopic" placeholder="请输入标题">
         </div>
       </li>
       <li class="addt_l1 fx">
         <div class="addt_d_span">
-          <span>教师经历</span>
+          <span>作者</span>
+        </div>
+        <div class="addt_d_input">
+          <input type="text" v-model="schoolInfoObj.schoolAuthor" placeholder="请输入作者姓名">
+        </div>
+      </li>
+      <li class="addt_l1 fx" v-if="schoolInfoObj.isok">
+        <div class="addt_d_span">
+          <span>资讯封面</span>
+        </div>
+        <div class="addt_img">
+          <el-upload
+            class="avatar-uploader"
+            :action="upLoadImgUrl"
+            :show-file-list="false"
+            :on-success="aptitudeSuccess"
+            :before-upload="beforeAvatarUpload">
+            <img v-if="schoolInfoObj.schoolMessageImage" :src="schoolInfoObj.schoolMessageImage" class="avatar">
+            <template v-else>
+              <i class="el-icon-plus avatar-uploader-icon"></i>
+              <p>点击上传资讯封面图片</p>
+            </template>
+          </el-upload>
+        </div>
+        <div class="addt_span">
+          请上传资讯封面，建议尺寸：335*268 px 格式为JPG、PNG,且不超过1M
+        </div>
+      </li>
+      <li class="addt_l1 fx">
+        <div class="addt_d_span">
+          <span>资讯内容</span>
         </div>
         <div class="addt_d_button">
           <el-button type="primary" @click="topAddjl">添加</el-button>
@@ -54,51 +77,144 @@
         <div class="addt_d_span">
           <span></span>
         </div>
-        <div class="addt_d_div" v-html="text"></div>
+        <div class="addt_d_div" v-html="schoolInfoObj.schoolContent"></div>
       </li>
-
-
-
-
-
     </ul>
     <div class="addt_button">
-      <el-button type="primary">立即提交</el-button>
+      <el-button type="primary" @click="topCommit">立即提交</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from "vue"
-import {Switch} from 'element-ui'
+import {Switch,Upload} from 'element-ui'
 Vue.use(Switch)
+Vue.use(Upload)
 export default {
   data () {
     return {
-      getYear:'',
       getYearList:['学前资讯','小学资讯','中学资讯','艺术培训','学历提升','职业培训','资格证书','其他资讯'],
-      tName:'',
-      text:'',
-
-      value1:true,
+      schoolInfoObj:{
+        schoolMessage:'',    //资讯分类
+        schoolTopic:'',    //标题
+        schoolAuthor:'',   //作者名称
+        schoolContent:'',   //资讯类容
+        schoolDynamic:'',   //1：开启动态 0:关闭动态1
+        schoolMessageImage:'',
+        isok:false,
+      },
+      upLoadImgUrl:'http://192.168.3.78:9101/upload.do',   //上传图片路径
+      getSchInfo:{},  //获取远程数据
+      isValue:true,
     };
   },
 
-  created() {
-    this.text = this.getItem('infoText');
+  created(){
+    let num = this.$route.query.num;
+    this.getObj(num);
   },
 
   methods: {
-    topAddjl(){
-      this.push('informationUndergo?id='+this.$route.query.id)
+    //获取图片路劲
+    aptitudeSuccess(res, file) {
+      if(!res.success) {
+        this.$message({message:'上传失败，请重新上传！',type: 'warning'});
+        return
+      }
+      this.schoolInfoObj.schoolMessageImage = res.message;
     },
-  }
 
+    //判断图片格式和大小
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/png'||file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 1;
+      if (!isJPG) this.$message({message:'上传头像图片只能是 JPG或png 格式!',type: 'warning'});
+      if (!isLt2M) this.$message({message:'上传头像图片大小不能超过 1MB!',type: 'warning'});
+      return isJPG && isLt2M;
+    },
+
+    //获取数据
+    getObj(num){
+      if(num){
+        let url = '/getMessage/selectMessage.do'
+        this.fetch({url,data:{id:num},method:'post'},6).then(res=>{
+          this.schoolInfoObj=res.data;
+          if(res.data.schoolDynamic ==='1'){
+            this.schoolInfoObj.isok = true;
+          }
+          this.getBDData()
+        })
+      }else{
+        this.getBDData();
+      }
+    },
+
+    //获取本地数据
+    getBDData(){
+      let schoolInfoObj = this.getItem('schoolInfoObj');
+      if(schoolInfoObj) this.schoolInfoObj = schoolInfoObj;
+    },
+
+    //跳转到添加资讯类容
+    topAddjl(){
+      this.setItem('schoolInfoObj',this.schoolInfoObj);
+      let query = this.$route.query;
+      let str = 'informationUndergo?id='+query.id;
+      if(query.type) str += '&type='+query.type;
+      if(query.num) str += '&num='+query.num;
+      this.push(str);
+    },
+
+    //点击提交时
+    topCommit(){
+      let schoolInfoObj = this.schoolInfoObj;
+      if(!schoolInfoObj.schoolMessage){
+        this.$message({message:'请选择资讯分类！',type:'warning'});
+        return
+      }
+      if(!schoolInfoObj.schoolTopic){
+        this.$message({message:'请输入标题！',type:'warning'});
+        return
+      }
+      if(!schoolInfoObj.schoolAuthor){
+        this.$message({message:'请输入作者名称！',type:'warning'});
+        return
+      }
+      if(schoolInfoObj.isok&&!schoolInfoObj.schoolMessageImage){
+        this.$message({message:'请输上传资讯封面图！',type:'warning'});
+        return
+      }
+      if(!schoolInfoObj.schoolContent){
+        this.$message({message:'请输入资讯类容！',type:'warning'});
+        return
+      }
+      let num = this.$route.query.num;
+      let url = '/getMessage/save.do';
+      if(num){
+        url = '/getMessage/updateMessage.do';
+        schoolInfoObj.id = num;
+      }
+      schoolInfoObj.schoolId = 'root'
+      if(!schoolInfoObj.isok){
+        delete schoolInfoObj.schoolMessageImage
+      }
+      this.fetch({url,data:schoolInfoObj,method:'post'},6).then(res=>{
+        if(res.data){
+          if(res.data.success){
+            this.setItem('schoolInfoObj',null);
+            this.push('/index/informationPublish?id='+this.$route.query.id)
+          }
+          this.$message({message:res.data.message,type:res.data.success?'success':'warning'});
+        }
+      })
+    }
+  }
 }
 
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
 .addInfo-app{
   width: 100%;
   .addt_u1{
@@ -119,7 +235,7 @@ export default {
       .addt_d_select{
         margin-left: 20px;
         .el-select{
-          width:150px;
+          width:180px;
           height:50px;
           border-radius:5px;
           .el-input>.el-input__inner{
@@ -159,7 +275,47 @@ export default {
       .addt_d_div{
         flex: 1;
         margin-left: 20px;
+        padding-right: 20px;
         min-height: 30px;
+        img{
+          width: 100%;
+        }
+      }
+      .addt_img{
+        margin-left:20px; 
+        width: 335px;
+        height: 268px;
+        border:1px solid #e6e6e6;
+        border-radius: 5px;
+        overflow: hidden;
+        .avatar-uploader{
+          width: 100%;
+          height: 100%;
+          .el-upload{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #e6e6e6;
+            i{
+              font-size: 60px;
+            }
+            p{
+              margin-top:5px;
+            }
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+      .addt_span{
+        font-size: 16px;
+        color: #999;
+        margin-top: 235px;
+        margin-left: 10px;
       }
     }
   }

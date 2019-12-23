@@ -30,18 +30,20 @@
       <table class="layui-table">
         <thead>
           <tr>
+            <th>学校名称</th>
             <th>教师名称</th>
-            <th>审核状态</th>
+            <!-- <th>审核状态</th> -->
             <th>内容详情</th>
             <th>提交时间</th>
           </tr> 
         </thead>
         <tbody>
           <tr v-for="(item,i) of teacherList" :key="i">
-            <td>{{item.name}}</td>
-            <td>{{item.shneghe===1?'已上架':'已下架'}}</td>
+            <td>{{item.organization_name}}</td>
+            <td>{{item.teacher_name}}</td>
+            <!-- <td>{{item.shneghe===1?'已上架':'已下架'}}</td> -->
             <td class="tm_td_ck" @click="topLookOver(item.id)">查看</td>
-            <td>{{item.date}}</td>
+            <td>{{item.create_time}}</td>
           </tr>
         </tbody>
       </table>
@@ -79,7 +81,7 @@ export default {
 
       teacherList:[],   //获取课程数据
 
-      allDataNum:100,   //获取数据总条数
+      allDataNum:0,   //获取数据总条数
       atPresentNum:1,    //当前页数
       pageData:20,    //每页的数据条数
     };
@@ -91,8 +93,9 @@ export default {
   },
 
   methods: {
-    //查看
+    //查看详情
     topLookOver(id){
+      
       this.push({path:'teacherManage/teacherDetail',query:{num:id,id:this.$route.query.id}})
     },
     //获取省列表
@@ -107,30 +110,25 @@ export default {
     //   this.cityList = chinaCityList['0_'+num]
     // },
 
+    //获取教师列表
     topSearch(){
-      this.teacherList = [];
-      let obj = {auditPass:this.auditPass,atPresentNum:this.atPresentNum,pageData:this.pageData};
-      if(this.province) obj.province = this.province;
-      if(this.city) obj.city = this.city;
-      if(!this.auditPass){
-        this.teacherList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:1,date:'2019-9-2 10:14:14'}
-        ]
-      }else{
-        this.teacherList = [
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'},
-          {id:100001,name:'小学数学一对一辅导',shneghe:2,date:'2019-9-2 10:14:14'}
-        ]
+      let url = '/school/searchTeacherVerify.do';
+      let data = {
+        teacherAdept:this.stl,
+        teacherName:this.searchTeacher,
+        page:''+this.atPresentNum,
+        limit:''+this.pageData
       }
+      this.fetch({url,data,method:'post'},6).then(res=>{
+        let {rows,total} = res.data;
+        this.allDataNum = total;
+        this.teacherList = rows;
+      })
     },
      //获取分页数
     topClick(num){
       this.atPresentNum = num;
+      this.topSearch();
     }
   },
   watch:{
@@ -160,7 +158,8 @@ export default {
       margin-top: 10px;
       align-items: center;
       .tm_left_span{
-        width: 80px;
+        width: 100px;
+        text-align: right;
         font-size: 16px;
         color:rgba(102,102,102,1);
       }

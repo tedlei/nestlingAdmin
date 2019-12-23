@@ -1,5 +1,5 @@
 <template>
-  <div class="iam-app">
+  <div class="iam-app fx">
     <ul class="iam_ul">
       <!-- <li class="iam_li fx">
         <div class="iam_li_left">
@@ -37,6 +37,14 @@
           <span class="iam_li_span">{{infoObj.schoolAuthor}}</span>
         </div>
       </li>
+      <li class="iam_li fx iam_img_height" v-if="infoObj.schoolDynamic==='1'">
+        <div class="iam_li_left">
+          <span>资讯封面</span>
+        </div>
+        <div class="iam_img">
+          <img v-if="infoObj.schoolMessageImage" :src="infoObj.schoolMessageImage" class="avatar">
+        </div>
+      </li>
       
       <li class="iam_li li_width fx">
         <div class="iam_li_left">
@@ -48,7 +56,6 @@
       </li>
     </ul>
     <div class="iam_btn" v-if="!auditPass">
-      <!-- <el-button :disabled="isForbiddenBnt" type="primary" @click="topAudit(true)">审核通过</el-button> -->
       <el-button :disabled="isForbiddenBnt" class="iam_btn_left" type="primary" @click="topAudit(true)">下架</el-button>
       <div class="iam_tc fx" v-show="isShowTc" @click="topCloseTc">
         <div class="iam_tc_d">
@@ -95,6 +102,7 @@ export default {
       let data = {id};
       this.fetch({url,data,method:'post'},6).then(res=>{
         this.infoObj = res.data;
+        console.log(this.infoObj)
       })
     },
     
@@ -123,8 +131,6 @@ export default {
         schoolId:this.infoObj.schoolId,
         message
       };
-      // console.log(data);
-      // return 
       this.fetch({url,data,method:'post'},6).then(res=>{
         let {message,success} = res.data;
         if(success){
@@ -143,8 +149,10 @@ export default {
 .iam-app{
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  flex-direction: column;
   .iam_ul{
+    flex: 1;
+    overflow-y: auto;
     .iam_li{
       margin-top: 10px;
       height: 40px;
@@ -180,16 +188,27 @@ export default {
           overflow: hidden;
           img{
             display: block;
-            // display: none;
-            // margin: auto;
-            // max-width: 100%;
-
           }
         }
       }
       .minHeight{
         flex: 1;
-        min-height: 295px;
+        min-height: 50px;
+      }
+    }
+    .iam_img_height{
+      height: auto;
+      .iam_img{
+        margin-left: 40px;
+        width: 335px;
+        height: 268px;
+        border:1px solid #e6e6e6;
+        border-radius: 5px;
+        overflow: hidden;
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .li_width{

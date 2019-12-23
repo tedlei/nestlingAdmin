@@ -44,7 +44,7 @@
         </div>
       </li>
 
-      <li class="bsm_li li_width fx">
+      <!-- <li class="bsm_li li_width fx">
         <div class="bsm_li_left">
           <span>logo</span>
         </div>
@@ -59,7 +59,7 @@
             </template>
           </div>
         </div>
-      </li>
+      </li> -->
       <li class="bsm_li li_width fx">
         <div class="bsm_li_left">
           <span>公众号二维码</span>
@@ -198,10 +198,10 @@ export default {
           schoolObj.schoolImage = '';
           message += '学校封面图片不规范或不符合，';
         }
-        if(ani.schoolLogo){
-          schoolObj.schoolLogo = '';
-          message += '学校LOGO图片不规范或不符合，';
-        }
+        // if(ani.schoolLogo){
+        //   schoolObj.schoolLogo = '';
+        //   message += '学校LOGO图片不规范或不符合，';
+        // }
         if(ani.schoolPublicCode){
           schoolObj.schoolPublicCode = '';
           message += '二维码图片不规范或不符合，';
@@ -226,7 +226,6 @@ export default {
       }else{
         this.isForbiddenBnt = true;
         this.isShowTc = true;//不通过
-        // this.jcSettingAydit(this.textarea,false);
       }
     },
 
@@ -236,7 +235,6 @@ export default {
         basicsStatus:'1',
         id:this.schoolObj.id
       }}
-      // data.schoolUser.courseStatus = '1';
       if(message){
         data.schoolUser = this.schoolObj;
         data.schoolUser.basicsStatus = '1';
@@ -245,13 +243,13 @@ export default {
       if(!boole){
         delete data.schoolUser;
         data.schoolUser = {basicsStatus:'2',id:this.schoolObj.id}
-        // data.schoolUser.courseStatus = '2'
       }
-      // return
-        console.log(data);
       this.fetch({url,data,method:'post'},6).then(res=>{
-        console.log(res.data);
-
+        let {message,success} = res.data;
+        if(success){
+          this.$router.go(-1);
+        }
+        this.$message({message,type:success?'success':'warning'})
       })
     },
 

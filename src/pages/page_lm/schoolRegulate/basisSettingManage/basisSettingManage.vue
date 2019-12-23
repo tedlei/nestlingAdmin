@@ -17,13 +17,6 @@
 </template>
 
 <script>
-// import {Button,Select,Option,Input,MessageBox,Pagination} from 'element-ui'
-// import Vue from 'vue';
-// Vue.use(Button);
-// Vue.use(Select);
-// Vue.use(Option);
-// Vue.use(Input);
-// Vue.use(Pagination);
 export default {
   data () {
     return {

@@ -58,7 +58,7 @@ export default {
       imgUploadUrl:'http://192.168.3.78:9101/upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
-        {pic:'',url:'',title:'主题广告图1',sortOrder:"1",categoryId:'4'},
+        {pic:'',url:'',title:'主题广告图1',sortOrder:"1",categoryId:'4',phone:''},
         {pic:'',url:'',title:'主题广告图2',sortOrder:"2",categoryId:'4'},
         {pic:'',url:'',title:'主题广告图3',sortOrder:"3",categoryId:'4'},
         {pic:'',url:'',title:'主题广告图4',sortOrder:"4",categoryId:'4'},
@@ -70,6 +70,10 @@ export default {
   },
 
   created(){
+    let phone = this.getItem('phone');
+    if(phone){
+      this.uploadList[0].phone = phone;
+    }
     this.getThemeAdvList();
   },
 
