@@ -55,7 +55,7 @@ export default {
       qrCodeImgName:'',
       qrCodeImgUrl:'',
 
-      imgUploadUrl:'http://192.168.3.78:9101/upload.do',   //图片上传路劲
+      imgUploadUrl:'http://192.168.3.88:9101/upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
         {pic:'',title:'app首页广告位',sortOrder:"1",categoryId:'8',phone:""},

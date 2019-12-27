@@ -11,11 +11,11 @@
         <p class="login_d_p">雏鸟教育后台管理</p>
         <div class="login_in fx">
           <p>手机号</p>
-          <input type="number" autofocus v-model="phone" placeholder="请输入手机号">
+          <input type="text" autofocus v-model="phone" placeholder="请输入手机号">
         </div>
         <div class="login_in fx top30">
           <p>验证码</p>
-          <input type="number" class="login_input" v-model="yzm" placeholder="请输入验证码">
+          <input type="text" class="login_input" v-model="yzm" placeholder="请输入验证码">
           <button 
           class="login_yzm" 
           :disabled="residueItem>0" 
