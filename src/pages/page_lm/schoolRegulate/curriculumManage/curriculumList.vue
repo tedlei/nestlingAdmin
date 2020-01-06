@@ -52,6 +52,7 @@
         <thead>
           <tr>
             <th>课程名称</th>
+            <th>学校名称</th>
             <th>审核状态</th>
             <th>内容详情</th>
             <th>提交时间</th>
@@ -60,6 +61,7 @@
         <tbody>
           <tr v-for="(item,i) of currList" :key="i">
             <td>{{item.courseName}}</td>
+            <td>{{item.organizationName}}</td>
             <td>{{item.courseStatus*1===0?'已上架':'已下架'}}</td>
             <td class="cum_td_ck" @click="topLookOver(item.id)">查看</td>
             <td>{{item.createTime}}</td>
@@ -172,7 +174,6 @@ export default {
       if(this.auditPass){
         data.courseStatus = '1';
       }
-      console.log(data)
       this.fetch({url,data,method:'post'},1).then(res=>{
         this.currList = res.data.rows;
         this.allDataNum = res.data.total;

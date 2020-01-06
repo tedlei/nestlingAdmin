@@ -16,7 +16,7 @@
           </div>
           <el-upload
             class="upload-demo"
-            :action="imgUploadUrl"
+            :action="localtion+imgUploadUrl"
             :limit="1"
             ref = 'imgUpload'
             :on-success="(res,file)=>{return aptitudeSuccess(res,file,i)}"
@@ -55,7 +55,7 @@ export default {
       qrCodeImgName:'',
       qrCodeImgUrl:'',
 
-      imgUploadUrl:'http://192.168.3.63:9102/upload.do',   //图片上传路劲
+      imgUploadUrl:'upload.do',   //图片上传路劲
 
       uploadList:[    //上传列表
         {pic:'',title:'登陆背景广告位',sortOrder:"1",categoryId:'6',phone:''},

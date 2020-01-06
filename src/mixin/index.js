@@ -28,31 +28,14 @@ export default new class Mixins {
 	netWork(){
 		let _this = null;
 		let ipList = [
-			'http://192.168.3.88:9101/',
-			'http://192.168.3.88:9102',
-			'http://192.168.3.88:9103/',
-			'http://192.168.3.88:9104/',
-			'http://192.168.3.88:9105/',
-			'http://192.168.3.88:9106/',
-		];
-		let ipList2 = [
-			'http://192.168.3.63:9101/',
-			'http://192.168.3.63:9102',
-			'http://192.168.3.63:9103/',
-			'http://192.168.3.63:9104/',
-			'http://192.168.3.63:9105/',
-			'http://192.168.3.63:9106/',
-		];
-		let ipList3 = [
-			'http://192.168.3.66:9101/',
-			'http://192.168.3.66:9102',
-			'http://192.168.3.66:9103/',
-			'http://192.168.3.66:9104/',
-			'http://192.168.3.66:9105/',
-			'http://192.168.3.66:9106/',
+			'http://112.74.18.182:9101/cnjy-search-web/',
+			'http://112.74.16.235:9102/cnjy-user-web/',
+			'http://112.74.16.235:9103/cnjy-curriculum-web/',
+			'http://120.24.45.159:9104/cnjy-school-web/',
+			'http://120.24.45.159:9105/cnjy-teacher-web/',
+			'http://120.78.145.39:9106/cnjy-chuniao-web/'
 		];
     	// 网络请求
-		// axios.defaults.withCredentials = false;  // 是否允许携带cookie-
 		axios.defaults.timeout = 20000;
 		axios.defaults.validateStatus = function (status) {
 			//验证响应状态码=>自定义成功失败规则：状态码以2/3开头算作成功
@@ -109,35 +92,9 @@ export default new class Mixins {
 					data = {};
 				}
 			}
-
 			return axios(params);
 		};
   }
-	// netWork() {
-	// 	// 网络请求
-	// 	axios.defaults.baseURL = 'http://127.0.0.1/';
-	// 	axios.defaults.withCredentials = true;  // 是否允许携带cookie-
-	// 	axios.defaults.headers = { 'Content-Type': 'application/json' };    //设置请求头
-	// 	axios.defaults.timeout = 10000;
-	// 	axios.defaults.validateStatus = function (status) {
-	// 		//验证响应状态码=>自定义成功失败规则：状态码以2/3开头算作成功
-	// 		let result = /^(2|3)\d{2}$/.test(status);
-	// 		if (!result) {
-	// 			let errorMsg = '';
-	// 			switch (status) {
-	// 				case 404:
-	// 					errorMsg = '网址错误';
-	// 					break;
-	// 				default:
-	// 					errorMsg = '请求失败';
-	// 			}
-	// 			throw new Error(errorMsg + '， 错误码为：' + status);
-	// 		}
-	// 		return result;
-	// 	};
-
-	// 	return axios;
-	// }
 
 	install() {
 		let self = this;
@@ -145,7 +102,8 @@ export default new class Mixins {
 			data() {
 				return {
 					fetch: self.axios,
-                    editor: editorInit  // 富文本编辑器初始化函数
+					editor: editorInit,  // 富文本编辑器初始化函数
+					localtion:'http://112.74.18.182:9101/cnjy-search-web/'
 				}
 			},
 			methods: {

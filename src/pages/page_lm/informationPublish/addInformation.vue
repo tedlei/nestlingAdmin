@@ -49,7 +49,7 @@
         <div class="addt_img">
           <el-upload
             class="avatar-uploader"
-            :action="upLoadImgUrl"
+            :action="localtion+upLoadImgUrl"
             :show-file-list="false"
             :on-success="aptitudeSuccess"
             :before-upload="beforeAvatarUpload">
@@ -104,7 +104,7 @@ export default {
         schoolMessageImage:'',
         isok:false,
       },
-      upLoadImgUrl:'http://192.168.3.88:9101/upload.do',   //上传图片路径
+      upLoadImgUrl:'/upload.do',   //上传图片路径
       getSchInfo:{},  //获取远程数据
       isValue:true,
     };
